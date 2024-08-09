@@ -22,10 +22,11 @@ supabase.auth.onAuthStateChange((_, _session) => {
 onMounted(() => {
   const { type, token_hash } = route.query
   if (!token_hash || !type) return
+  console.log("Logging in...")
   supabase.auth.verifyOtp({
     token_hash: token_hash.toString(),
     type: 'magiclink'
-  })
+  }).then(() => console.log("Should be done"))
 })
 
 const route = useRoute()
