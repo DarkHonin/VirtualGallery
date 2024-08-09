@@ -61,8 +61,8 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 const props = defineProps<{
-    width: number,
-    height: number
+    width: number | string,
+    height: number | string
 }>()
 
 const root = ref<HTMLElement>()
@@ -83,7 +83,7 @@ const svgSize = ref({
 
 const handleResize = () => {
 
-    const [width, height] = [props.width, props.height]
+    const [width, height] = [props.width, props.height].map(e => typeof (e) == "string" ? parseInt(e) : e)
     const { min } = Math
 
     svgSize.value = {

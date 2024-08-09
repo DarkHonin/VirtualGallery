@@ -15,11 +15,11 @@
 
                         <template #item="{ item, itemClassString } : { item: Slot, itemClassString: string }">
                             <RouterLink :key="item.id" :to="{ name: 'slot_view', params: { slotId: item.id } }"
-                                :style="`background-image: URL(${artworkImage(item.artwork)})`"
+                                :style="`background-image: URL(${artworkImage(<Artwork>item.artwork)})`"
                                 :class="itemClassString">
                                 <label class="align-bottom mt-auto bg-primary p-2">{{
                                     item.slot_name
-                                    }} - {{ item.artwork?.title }}</label>
+                                }} - {{ item.artwork?.title }}</label>
 
                             </RouterLink>
                         </template>
@@ -51,8 +51,8 @@ import BaseGrid from "@/components/grid/Base.grid.vue"
 const store = useSlotStore()
 
 
-const artworkImage = (art?: Artwork) => {
-    if (!art) return
+const artworkImage = (art?: Artwork | number) => {
+    if (!art || typeof (art) == 'number') return
     const { data } = supabase.storage.from('gallery_photos').getPublicUrl(art.resource)
     return data.publicUrl
 

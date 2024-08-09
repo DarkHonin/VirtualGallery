@@ -44,7 +44,7 @@ const emit = defineEmits<{
 
 const slots = defineSlots<{
     display(props: { item: any[] }): void,
-    item(props: { item: any }): void,
+    item(props: { item: any, addItem: { (i: any): void } }): void,
 }>()
 
 

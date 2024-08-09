@@ -21,7 +21,7 @@
             <div class="col-span-3">
                 <BaseInput label="Slot title" type="text" v-model="slotStore.slot.slot_name"
                     placeholder="What should it be called?" />
-                <SelectInput v-model="slotStore.slot.artwork" item_value="id" :options="artworkStore.artworks"
+                <SelectInput v-model="<Artwork>slotStore.slot.artwork" item_value="id" :options="artworkStore.artworks"
                     placeholder="Select artwork" label="Selected Artwork">
                     <template #display="{ item }">
                         <ArtworkListItem v-if="item && item[0]" :item="item?.[0]" />

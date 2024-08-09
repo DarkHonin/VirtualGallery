@@ -35,12 +35,11 @@ export const useSlotStore = defineStore('SlotStore', {
     preflight(uid?: string) {
       return slotStoreStateActions.runAction(this, 'loading', async () => {
         await new Promise((y) => setTimeout(y, 1000))
-        const userStore = useUserStore()
         return SlotTable()
           .select('*,artwork(*)')
           .then(({ data, error }) => {
             if (error) throw error
-            this._slots = data
+            this._slots = <any>data
           })
       })
     },
@@ -60,9 +59,9 @@ export const useSlotStore = defineStore('SlotStore', {
           if (e.id == id) return Boolean((this._slots![i] = e))
         })
 
-        if (!found) this._slots?.push(data)
+        if (!found) this._slots?.push(<any>data)
 
-        this._activeSlot = data
+        this._activeSlot = <any>data
         this._cachedSlot = JSON.parse(JSON.stringify(data))
 
         return data
