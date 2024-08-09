@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  min-height: 100vh;
+  color: theme('colors.label-primary');
+  background-color: theme('colors.primary-disabled');
+  overflow-y: hidden;
+}
+
+.drawer-element:has(.route-active) {
+  background-color: theme('colors.primary-active');
+}
