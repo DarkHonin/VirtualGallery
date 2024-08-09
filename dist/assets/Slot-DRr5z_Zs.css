@@ -1,0 +1,1 @@
+.select-input .options{display:none}.select-input .options.active{--tw-bg-opacity: 1;background-color:rgb(100 116 139 / var(--tw-bg-opacity))}.select-input:has(:focus) .options,.select-input:has(:focus-within) .options{display:block}
