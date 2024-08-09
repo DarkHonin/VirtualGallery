@@ -23,7 +23,7 @@ onMounted(() => {
 
   const hash = window.location.hash
   hash.replace('#/?', '')
-
+  console.log(window.location.hash)
   const { type, token_hash } = Object.fromEntries(hash.split('&').map(e => e.split('=')))
   console.log(type, token_hash)
   if (!token_hash || !type) return
