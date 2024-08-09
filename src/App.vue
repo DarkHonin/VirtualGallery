@@ -21,11 +21,10 @@ supabase.auth.onAuthStateChange((_, _session) => {
 
 onMounted(() => {
 
-  const hash = window.location.hash
-  hash.replace('#/?', '')
-  console.log(window.location.hash, hash)
+  const hash = window.location.hash.replace('#/?', '')
+
   const { type, token_hash } = Object.fromEntries(hash.split('&').map(e => e.split('=')))
-  console.log(type, token_hash)
+
   if (!token_hash || !type) return
   console.log("Logging in...")
   supabase.auth.verifyOtp({
