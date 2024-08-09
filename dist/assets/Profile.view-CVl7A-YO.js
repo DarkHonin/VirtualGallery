@@ -1,0 +1,1 @@
+import{d as r,u as s,a as t,t as o,k as a,o as n}from"./index-DqsONkSA.js";const p=r({__name:"Profile.view",setup(u){const e=s();return(c,i)=>(n(),t("div",null,o(a(e).user),1))}});export{p as default};
