@@ -20,7 +20,12 @@ supabase.auth.onAuthStateChange((_, _session) => {
 })
 
 onMounted(() => {
-  const { type, token_hash } = route.query
+
+  const hash = window.location.hash
+  hash.replace('#/?', '')
+
+  const { type, token_hash } = Object.fromEntries(hash.split('&').map(e => e.split('=')))
+  console.log(type, token_hash)
   if (!token_hash || !type) return
   console.log("Logging in...")
   supabase.auth.verifyOtp({
