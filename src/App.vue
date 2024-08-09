@@ -10,12 +10,22 @@ import LayoutSplit from './components/layout/Layout.split.vue';
 import DrawerElement from './components/drawer/Drawer.element.vue';
 import BaseIcon from './components/icon/Base.icon.vue';
 import BrandGraphic from './components/graphics/Brand.graphic.vue';
+import type { MobileOtpType, EmailOtpType } from '@supabase/supabase-js';
 const userStore = useUserStore()
 const router = useRouter()
 
 supabase.auth.onAuthStateChange((_, _session) => {
   const store = useUserStore()
   store._session = _session ?? undefined
+})
+
+onMounted(() => {
+  const { type, token_hash } = route.query
+  if (!token_hash || !type) return
+  supabase.auth.verifyOtp({
+    token_hash: token_hash.toString(),
+    type: 'magiclink'
+  })
 })
 
 const route = useRoute()
