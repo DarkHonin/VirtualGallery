@@ -11,6 +11,8 @@ import DrawerElement from './components/drawer/Drawer.element.vue';
 import BaseIcon from './components/icon/Base.icon.vue';
 import BrandGraphic from './components/graphics/Brand.graphic.vue';
 import type { MobileOtpType, EmailOtpType } from '@supabase/supabase-js';
+import { artworks, slots, profile } from './router/routes';
+
 const userStore = useUserStore()
 const router = useRouter()
 
@@ -30,7 +32,7 @@ onMounted(() => {
   supabase.auth.verifyOtp({
     token_hash: token_hash.toString(),
     type: 'magiclink'
-  }).then(() => console.log("Should be done"))
+  }).then(() => router.replace({ name: "home" }))
 })
 
 const route = useRoute()
@@ -40,14 +42,15 @@ const routeRoot = computed(() => (route.matched.find(e => e.meta.title)) ?? unde
 </script>
 
 <template>
-  <LayoutBase :stick="['top', 'left']">
+  <LayoutBase :stick="['top', 'left']" class="h-svh min-w-fit">
     <template #left v-if="!userStore.isActionActive('loading') && userStore.user">
       <DrawerComponent direction="vertical" expand>
-        <DrawerElement icon="image" :to="{ name: 'artworks' }" label="Artworks" />
-        <DrawerElement icon="add_diamond" :to="{ name: 'slots' }" label="Slots" />
+        <DrawerElement icon="image" :to="artworks()" label="Artworks" />
+        <DrawerElement icon="add_diamond" :to="slots()" label="Slots" />
 
-        <DrawerElement v-if="!userStore.user" icon="person" class="mt-auto" label="Login" />
-        <DrawerElement v-else icon="person" class="mt-auto" :label="userStore.user.email" :to="{ name: 'profile' }">
+
+        <DrawerElement v-if="userStore.user" icon="person" class="mt-auto" :label="userStore.user.email"
+          :to="profile()">
           <template #actions>
             <BaseIcon @click="userStore.logout()" name="logout"
               class="block grow m-auto hover:bg-primary-hover py-2 px-1" />
@@ -74,11 +77,13 @@ const routeRoot = computed(() => (route.matched.find(e => e.meta.title)) ?? unde
         <component v-if="!userStore.isActing" :is="Component" />
         <template v-else>
           <div class="w-full flex h-full">
-
             <SpinnerLoader class="m-auto" :loading="true" :message="userStore.activeActions.join('<br/>')" />
           </div>
         </template>
       </RouterView>
+    </template>
+    <template #bottom>
+
     </template>
   </LayoutBase>
 

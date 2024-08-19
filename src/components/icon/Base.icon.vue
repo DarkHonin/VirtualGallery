@@ -1,6 +1,6 @@
 <template>
     <slot>
-        <span :class="`material-symbols-${style}`">{{ name }}</span>
+        <span :class="`material-symbols-${style}`" v-bind="$attrs">{{ name }}</span>
     </slot>
 </template>
 

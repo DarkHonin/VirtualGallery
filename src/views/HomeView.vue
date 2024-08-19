@@ -1,7 +1,8 @@
 <template>
-  <div ref="root" class="h-full relative flex">
+  <div class="h-full relative flex flex-col" ref="root">
     <StarfieldGraphic class="w-full h-full fixed top-10" style="z-index: -1;" />
-    <div class="m-auto flex flex-col items-center justify-center" style="height: calc(100vh - 2.5em)">
+    <div class="m-auto flex flex-col items-center justify-center"
+      style="height: minmax(calc(100vh - 2.5em), min-content); min-height: calc(100vh - 2.5em)">
       <BrandGraphic width="500" height="500" />
       <label class="text-4xl underline">HoninWorx</label>
       <label class="text-md text-center p-2">The mad works of a dragon named Honin</label>
@@ -18,16 +19,17 @@
       </label>
       <label class="text-xs p-2 text-center"> Check out these links while this site is getting setup </label>
     </div>
+    <GalleryComponent />
   </div>
 </template>
 
 <script lang="ts" setup>
+import GalleryComponent from '@/components/gallery/Gallery.component.vue';
+import ArtworkGalleryItem from '@/components/gallery/Gallery.item.vue';
 import BrandGraphic from '@/components/graphics/Brand.graphic.vue';
 import StarfieldGraphic from '@/components/graphics/Starfield.graphic.vue';
-import TreeGraphic from '@/components/graphics/Tree.graphic.vue';
 import MediaIcon from '@/components/icon/Media.icon.vue';
-import LayoutSplit from '@/components/layout/Layout.split.vue';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { useArtworkStore } from '@/stores/Artworks.store';
 
 
 

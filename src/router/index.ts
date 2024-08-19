@@ -3,18 +3,19 @@ import HomeView from '../views/HomeView.vue'
 import { useUserStore } from '@/stores/User.store'
 import { useArtworkStore } from '@/stores/Artworks.store'
 import { useSlotStore } from '@/stores/Slots.store'
+import * as routeNames from './routes'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      ...routeNames.home(),
       component: HomeView
     },
     {
       path: '/auth',
-      name: 'auth',
+      ...routeNames.auth(),
       component: () => import('../views/Auth/Login.view.vue')
     },
 
@@ -24,7 +25,7 @@ const router = createRouter({
       children: [
         {
           path: '/profile',
-          name: 'profile',
+          ...routeNames.profile(),
           component: () => import('../views/Profile.view.vue'),
           async beforeEnter(from, to, next) {
             const store = useUserStore()
@@ -34,7 +35,7 @@ const router = createRouter({
         },
         {
           path: '/artworks',
-          name: 'artworks',
+          ...routeNames.artworks(),
           component: () => import('../views/Artwork/Artworks.view.vue'),
           async beforeEnter(from, to, next) {
             const artworkStore = useArtworkStore()
@@ -47,7 +48,7 @@ const router = createRouter({
           children: [
             {
               path: 'i/:artworkId',
-              name: 'artwork_view',
+              ...routeNames.artwork(),
               component: () => import('../views/Artwork/Artwork.view.vue'),
               beforeEnter(from, to, next) {
                 // if (!(to.params.artworkId ?? from.params.artworkId)?.length)
@@ -66,7 +67,7 @@ const router = createRouter({
         },
         {
           path: '/slots',
-          name: 'slots',
+          ...routeNames.slots(),
           component: () => import('../views/Slots/Slots.view.vue'),
           async beforeEnter(from, to, next) {
             const slotStore = useSlotStore()
@@ -79,7 +80,7 @@ const router = createRouter({
           children: [
             {
               path: 'i/:slotId',
-              name: 'slot_view',
+              ...routeNames.slot(),
               component: () => import('../views/Slots/Slot.view.vue'),
               beforeEnter(from, to, next) {
                 // if (!(to.params.artworkId ?? from.params.artworkId)?.length)

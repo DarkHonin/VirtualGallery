@@ -49,19 +49,17 @@ $edge-size: 2.5em;
 
 .layout-base {
     display: grid;
-    min-height: 100vh;
-    max-width: 100vw;
     grid-template-rows: $edge-size auto $edge-size;
-    grid-template-columns: $edge-size auto $edge-size;
+    grid-template-columns: $edge-size 1fr $edge-size;
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 100vh;
 
     .layout-base__content {
         grid-row-start: 1;
         grid-row-end: -1;
         grid-column-start: 1;
         grid-column-end: -1;
+        max-width: 100%;
     }
 
     .layout-base__top {

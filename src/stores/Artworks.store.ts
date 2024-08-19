@@ -32,7 +32,7 @@ export const useArtworkStore = defineStore('ArtworkStore', {
   }),
   getters: {
     artworks: ({ _artworks }) => _artworks ?? [],
-    artwork: ({ _activeArtwork }): Artwork => _activeArtwork ?? <Artwork>{},
+    artwork: ({ _activeArtwork }) => _activeArtwork ?? <Artwork>{},
     ...artworkStoreStateActions.getters
   },
   actions: {
@@ -40,20 +40,20 @@ export const useArtworkStore = defineStore('ArtworkStore', {
       return artworkStoreStateActions.runAction(this, 'loading', async () => {
         await new Promise((y) => setTimeout(y, 1000))
         const userStore = useUserStore()
-        return ArtworksTable()
-          .select('*,resource')
-          .eq('author', uid ?? userStore.user!.id)
-          .then(({ data, error }) => {
-            if (error) throw error
-            this._artworks = data
-          })
+        const promise = ArtworksTable().select('*,resource')
+        if (uid) promise.eq('author', uid ?? userStore.user!.id)
+
+        return promise.then(({ data, error }) => {
+          if (error) throw error
+          this._artworks = data
+        })
       })
     },
     clearCurrentArtwork() {
       delete this._activeArtwork
       delete this._cachedArtwork
     },
-    loadArtwork(id: Artwork['id']) {
+    loadArtwork(id: Artwork['id'] | 'new') {
       return artworkStoreStateActions.runAction(this, 'loadingArtwork', async () => {
         this.clearCurrentArtwork()
         const { data, error } = await ArtworksTable().select().eq('id', id).single()
@@ -65,9 +65,9 @@ export const useArtworkStore = defineStore('ArtworkStore', {
           if (e.id == id) return Boolean((this._artworks![i] = e))
         })
 
-        if (!found) this._artworks?.push(data)
+        if (!found) this._artworks?.push(<Artwork>data)
 
-        this._activeArtwork = data
+        this._activeArtwork = <Artwork>data
         this._cachedArtwork = JSON.parse(JSON.stringify(data))
 
         return data
@@ -78,11 +78,15 @@ export const useArtworkStore = defineStore('ArtworkStore', {
       return artworkStoreStateActions.runAction(this, 'save', async () => {
         await new Promise((y) => setTimeout(y, 1000))
         if (this.artwork!.id) {
+          if (<any>this.artwork!.resource instanceof File) await this.saveArtworkFile()
+
           const update = await ArtworksTable().update(this.artwork!).eq('id', this.artwork!.id)
 
           if (update.error) throw update.error ?? 'Something went wrong during the save'
           return this.loadArtwork(this.artwork!.id)
         } else {
+          if (<any>this.artwork!.resource instanceof File) await this.saveArtworkFile()
+          else throw 'Artwork file is required'
           this.artwork!.author = useUserStore().user!.id
           const update = await ArtworksTable().insert(this.artwork!).select().single()
           if (update.error || !update.data)
@@ -92,13 +96,13 @@ export const useArtworkStore = defineStore('ArtworkStore', {
         }
       })
     },
-    saveArtworkFile(file: File) {
-      if (!this.artwork) throw 'No active artwork to bind file to'
+    saveArtworkFile() {
+      if (!this.artwork || !(<any>this.artwork.resource instanceof File))
+        throw 'No active artwork to bind file to'
       return artworkStoreStateActions.runAction(this, 'upload', async () => {
-        const artifactPath = `uploads/${this.artwork!.title.split(' ').join('_')}_${file.name}`
-        this.artwork.resource = artifactPath
-        await ArtworkStorage().upload(artifactPath, file)
-        return await this.saveArtworkDetails()
+        const artifactPath = `uploads/${this.artwork!.title.split(' ').join('_')}_${(<File>this.artwork!.resource).name}`
+        await ArtworkStorage().upload(artifactPath, this.artwork!.resource)
+        this.artwork!.resource = artifactPath
       })
     },
     deleteArtwork() {

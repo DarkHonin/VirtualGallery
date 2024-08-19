@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-flow-col auto-cols-min auto-rows-fr gap-2 items-start justify-start mb-auto w-full px-2">
+    <div class="flex gap-2 items-start justify-start mb-auto w-auto px-2 h-auto flex-wrap">
         <slot name="prepend" v-bind="{ itemClassString }" />
 
         <template v-for="i, k in items" :key="k">

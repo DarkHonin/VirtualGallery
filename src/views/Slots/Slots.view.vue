@@ -1,35 +1,35 @@
 <template>
     <RouterView>
         <template v-slot="{ Component }">
-            <div class="w-full flex h-full">
-
-                <SpinnerLoader :loading="store.isActionActive('loading')" :message="store.activeActions.join('<br/>')"
-                    size="lg" class="m-auto">
-                    <BaseGrid :items="store.slots" v-if="!Component" class="p-2">
-                        <template #prepend="{ itemClassString }">
-                            <RouterLink :to="{ name: 'slot_view', params: { slotId: 'new' } }" :class="itemClassString"
-                                class="border-2 border-primary-hover border-dashed">
-                                <BaseIcon name="add" class="m-auto" />
-                            </RouterLink>
-                        </template>
-
-                        <template #item="{ item, itemClassString } : { item: Slot, itemClassString: string }">
-                            <RouterLink :key="item.id" :to="{ name: 'slot_view', params: { slotId: item.id } }"
-                                :style="`background-image: URL(${artworkImage(<Artwork>item.artwork)})`"
-                                :class="itemClassString">
-                                <label class="align-bottom mt-auto bg-primary p-2">{{
-                                    item.slot_name
-                                }} - {{ item.artwork?.title }}</label>
-
-                            </RouterLink>
-                        </template>
-
-                    </BaseGrid>
 
 
-                    <component v-else :is="Component" />
-                </SpinnerLoader>
-            </div>
+            <SpinnerLoader :loading="store.isActionActive('loading')" :message="store.activeActions.join('<br/>')"
+                size="lg" class="m-auto">
+                <BaseGrid :items="store.slots" v-if="!Component" class="p-2">
+                    <template #prepend="{ itemClassString }">
+                        <RouterLink :to="{ name: 'slot_view', params: { slotId: 'new' } }" :class="itemClassString"
+                            class="border-2 border-primary-hover border-dashed">
+                            <BaseIcon name="add" class="m-auto" />
+                        </RouterLink>
+                    </template>
+
+                    <template #item="{ item, itemClassString } : { item: Slot, itemClassString: string }">
+                        <RouterLink :key="item.id" :to="{ name: 'slot_view', params: { slotId: item.id } }"
+                            :style="`background-image: URL(${artworkImage(<Artwork>item.artwork)})`"
+                            :class="itemClassString">
+                            <label class="align-bottom mt-auto bg-primary p-2">{{
+                                item.slot_name
+                            }} - {{ item.artwork?.title }}</label>
+
+                        </RouterLink>
+                    </template>
+
+                </BaseGrid>
+
+
+                <component v-else :is="Component" />
+            </SpinnerLoader>
+
         </template>
     </RouterView>
 

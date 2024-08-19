@@ -13,7 +13,7 @@ export interface TextAreaProps extends BaseInputProps {
 
 export interface ImageInputProps extends BaseInputProps {
   type?: 'image'
-  modelValue: string | undefined
+  modelValue: string | File | undefined
 }
 
 export interface SelectInputProps extends BaseInputProps {
