@@ -1,5 +1,5 @@
 <template>
-    <svg :view-box="`0 0 ${width} ${height}`" v-bind="{ ...props, ...$args }">
+    <svg :view-box="`0 0 ${width} ${height}`" v-bind="{ ...props, }">
         <slot />
     </svg>
 </template>
