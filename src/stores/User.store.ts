@@ -1,62 +1,64 @@
-import type { Session } from '@supabase/supabase-js'
-import { defineStore } from 'pinia'
-import { supabase } from '@/db/index.db'
-import { defineStateActions, type StoreState } from './util/StateActions.util'
-import { api } from '@/services/index.service'
+import type { Session } from "@supabase/supabase-js";
+import { defineStore } from "pinia";
+import { supabase } from "@/db/index.db";
+import { defineStateActions, type StoreState } from "./util/StateActions.util";
+import { api } from "@/services/index.service";
 
 export const userStoreActions = {
-  loading: 'Loading Session',
-  signIn: 'Signing In',
-  signOut: 'Signing Out'
-}
+  loading: "Loading Session",
+  signIn: "Signing In",
+  signOut: "Signing Out",
+};
 
-const userStoreStateActions = defineStateActions(userStoreActions)
+const userStoreStateActions = defineStateActions(userStoreActions);
 
 interface UserStore extends StoreState<typeof userStoreActions> {
-  _session?: Session
+  _session?: Session;
 }
 
-export const useUserStore = defineStore('UserStore', {
+export const useUserStore = defineStore("UserStore", {
   state: (): UserStore => ({
     _session: undefined,
-    ...userStoreStateActions.state
+    ...userStoreStateActions.state,
   }),
   getters: {
     user: ({ _session }) => _session?.user,
-    ...userStoreStateActions.getters
+    ...userStoreStateActions.getters,
   },
   actions: {
     preflight() {
-      return userStoreStateActions.runAction(this, 'loading', async () => {
+      return userStoreStateActions.runAction(this, "loading", async () => {
         return supabase.auth.getSession().then(({ data }) => {
-          if (!data || !data.session) return (this._session = undefined)
-          this._session = data.session
-        })
-      })
+          if (!data || !data.session) return (this._session = undefined);
+          this._session = data.session;
+        });
+      });
     },
     async signIn(email: string) {
-      return userStoreStateActions.runAction(this, 'signIn', () =>
-        api('vue-signin', { body: JSON.stringify({ email }) })
-      )
+      return userStoreStateActions.runAction(
+        this,
+        "signIn",
+        () => api("vue-signin", { body: JSON.stringify({ email }) }),
+      );
     },
     async signInWPass(email: string, password: string) {
-      return userStoreStateActions.runAction(this, 'signIn', async () => {
+      return userStoreStateActions.runAction(this, "signIn", async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
-          password
-        })
+          password,
+        });
 
-        if (error) throw error
+        if (error) throw error;
 
-        this._session = data.session
-      })
+        this._session = data.session;
+      });
     },
     logout() {
-      return userStoreStateActions.runAction(this, 'signOut', async () => {
-        await new Promise((y) => setTimeout(y, 5000))
-        this._session = undefined
-        return supabase.auth.signOut()
-      })
-    }
-  }
-})
+      return userStoreStateActions.runAction(this, "signOut", async () => {
+        await new Promise((y) => setTimeout(y, 5000));
+        this._session = undefined;
+        return supabase.auth.signOut();
+      });
+    },
+  },
+});

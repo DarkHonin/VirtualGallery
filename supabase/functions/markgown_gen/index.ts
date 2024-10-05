@@ -47,7 +47,11 @@ Deno.serve(async (req) => {
       status: 200,
     });
   } catch (err) {
-    return new Response(String(err?.message ?? err), { status: 500 });
+    console.error(err);
+    return new Response(String(err?.message ?? err), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 });
 
