@@ -93,9 +93,6 @@ const selected = computed(() => {
         display: none;
     }
 
-    .options.active {
-        @apply bg-primary-active
-    }
 
     &:has(:focus),
     &:has(:focus-within) {

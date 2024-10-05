@@ -1,5 +1,5 @@
-import type { Post } from "@/db/artwork.model";
-import type { Slot } from "@/db/slot.model";
+import type { Post } from "@/db/post.model";
+
 import type {
   RouteLocationAsPathGeneric,
   RouteLocationAsRelativeGeneric,
@@ -17,9 +17,4 @@ export const posts = () => ({ name: "posts" });
 export const post = (postId?: Post["id"] | "new") => ({
   name: "artwork_view",
   ...(postId ? { params: { postId } } : {}),
-});
-export const slots = () => ({ name: "slots" });
-export const slot = (slotId?: Slot["id"]) => ({
-  name: "slot_view",
-  ...(slotId ? { params: { artworkId: slotId } } : {}),
 });

@@ -1,1 +1,0 @@
-.button-base__control{transition:filter .5s;filter:brightness(1)}.button-base__control[disabled]{filter:brightness(.5)}.button-base__control:not([disabled]):hover{filter:brightness(.8)}

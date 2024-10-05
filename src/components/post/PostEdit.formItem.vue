@@ -6,14 +6,14 @@
                 class=" select-none flex justify-between items-center cursor-pointer">
                 <span>Content</span>
                 <input hidden id="content" type="radio" name="view" value="content"
-                    @click="view = $event.target.value" />
+                    @click="view = ($event.target as HTMLInputElement).value" />
             </label>
 
             <label for="preview" :class="{ 'bg-background2': view == 'preview' }"
                 class="select-none flex justify-between items-center cursor-pointer">
                 <span>Preview</span>
                 <input hidden id="preview" type="radio" name="view" value="preview"
-                    @click="view = $event.target.value" />
+                    @click="view = ($event.target as HTMLInputElement).value" />
             </label>
 
         </div>

@@ -11,7 +11,7 @@ import DrawerElement from './components/drawer/Drawer.element.vue';
 import BaseIcon from './components/icon/Base.icon.vue';
 import BrandGraphic from './components/graphics/Brand.graphic.vue';
 import type { MobileOtpType, EmailOtpType } from '@supabase/supabase-js';
-import { posts, slots, profile } from './router/routes';
+import { posts, profile } from './router/routes';
 
 const userStore = useUserStore()
 const router = useRouter()
