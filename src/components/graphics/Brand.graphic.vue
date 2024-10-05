@@ -86,9 +86,11 @@ const handleResize = () => {
     const [width, height] = [props.width, props.height].map(e => typeof (e) == "string" ? parseInt(e) : e)
     const { min } = Math
 
+    const availableWidth = min(width, window.innerWidth)
+
     svgSize.value = {
-        width: min(width, window.innerWidth),
-        height: height
+        width: availableWidth,
+        height: availableWidth
     }
 }
 

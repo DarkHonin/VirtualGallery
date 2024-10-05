@@ -29,7 +29,7 @@ import ArtworkGalleryItem from '@/components/gallery/Gallery.item.vue';
 import BrandGraphic from '@/components/graphics/Brand.graphic.vue';
 import StarfieldGraphic from '@/components/graphics/Starfield.graphic.vue';
 import MediaIcon from '@/components/icon/Media.icon.vue';
-import { useArtworkStore } from '@/stores/Artworks.store';
+import { usePostStore } from '@/stores/Post.store';
 
 
 

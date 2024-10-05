@@ -1,8 +1,12 @@
 <template>
     <div class="loader-spinner  text-label-primary w-min h-min animate-pulse inline-flex overflow-visible"
         v-bind="$attrs" v-if="loading">
-        <BrandGraphic width="100" height="100" name="progress_activity" />
-        <label class="text-center m-auto">{{ message }}</label>
+        <BrandGraphic width="100" height="100" name="progress_activity" style="min-width: 100px" />
+        <label class="text-center m-auto">
+            <slot name="message" :bind="{ message }">
+                {{ message }}
+            </slot>
+        </label>
     </div>
     <slot v-else></slot>
 </template>

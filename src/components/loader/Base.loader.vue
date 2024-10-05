@@ -1,5 +1,6 @@
 <template>
-    <div class="loader-base absolute h-1 w-full inline-flex animate-pulse  bg-primary" v-if="loading">
+    <div class="loader-base absolute h-1 w-full inline-flex animate-pulse  left-0 bg-primary bottom-0 z-50"
+        v-if="loading">
     </div>
 </template>
 

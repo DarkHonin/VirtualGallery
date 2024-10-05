@@ -10,17 +10,17 @@
 </template>
 
 <script setup lang="ts">
-import { useArtwork, type Artwork } from '@/db/artwork.model';
+import { usePost, type Post } from '@/db/post.model';
 import StarGraphic from '../graphics/Star.graphic.vue';
 import { onMounted, ref } from 'vue';
 import BrandGraphic from '../graphics/Brand.graphic.vue';
 
 
 const props = defineProps<{
-    item: Artwork,
+    item: Post,
 }>()
 
-const { imagePublicUrl } = useArtwork(props.item)
+const { imagePublicUrl } = usePost(props.item)
 
 const image = ref<string>()
 

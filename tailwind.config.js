@@ -5,17 +5,11 @@ export default {
   theme: {
     extend: {},
     colors: {
-      'label-primary': '#FFFFFF',
-      'input-primary': '#000000',
-      primary: colors.gray[900],
-      accent: colors.blue[900],
-      'primary-active': colors.slate[500],
-      'primary-hover': colors.slate[700],
-      'primary-disabled': colors.zinc[900],
-      'button-primary': colors.zinc[600],
-      'button-positive': colors.emerald[300],
-      'button-negative': colors.red[700],
-      'button-border': colors.emerald[300]
+      background: '#161616',
+      background2: '#303030',
+      primary: '#1D263D',
+      positive: colors.green['500'],
+      negative: colors.red['500']
     }
   },
   plugins: []

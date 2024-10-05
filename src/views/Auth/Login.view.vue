@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '@/components/input/Base.input.vue'
 import BaseButton from '@/components/button/Base.button.vue'
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useUserStore } from '@/stores/User.store'
 import LayoutSplit from '@/components/layout/Layout.split.vue';
@@ -15,6 +15,13 @@ const userStore = useUserStore()
 
 const isLocal = import.meta.env['VITE_ENV'] == "LOCAL"
 const router = useRouter()
+const route = useRoute()
+
+const redirectTo = computed(() => {
+    console.log(route.query)
+    if (!route.query['returnTo']) return { name: "profile" }
+    return (route.query['returnTo']) as string
+})
 
 const handleLogin = async () => {
     if (!userEmail.value) return
@@ -25,7 +32,7 @@ const handleLogin = async () => {
             await userStore.signInWPass(userEmail.value, userPassword.value!)
         else
             await userStore.signIn(userEmail.value)
-        router.replace({ name: "profile" })
+        router.replace(redirectTo.value)
     } catch (error) {
         if (error instanceof Error) {
             alert(error.message)

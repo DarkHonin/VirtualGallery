@@ -1,11 +1,11 @@
 <template>
     <BaseInput v-bind="props" class="h-min min-w-48 flex-col flex">
         <template #control="{ handleUpdate }">
-            <div v-if="!(preview || modelValue)"
-                class="grow border-dashed border border-primary-active hover:border-primary-hover text-primary-active hover:text-primary-hover w-full h-40 flex cursor-pointer">
+            <img :src="previewUrl" v-if="preview && modelValue && showPreview" class="cursor-pointer" />
+            <div v-else
+                class="grow border-dashed border border-primary-active hover:border-primary-hover text-primary-active hover:text-primary-hover w-full h-10 flex cursor-pointer">
                 <BaseIcon name="add" class="m-auto" />
             </div>
-            <img v-else :src="previewUrl" class="cursor-pointer" />
             <input type="file" accept="Image/png;Image/jpeg" hidden @change="handleFileSelect">
         </template>
     </BaseInput>
@@ -18,7 +18,8 @@ import BaseInput from './Base.input.vue';
 import type { ImageInputProps } from './input.types';
 
 const props = withDefaults(defineProps<ImageInputProps>(), {
-    type: () => 'image'
+    type: () => 'image',
+    showPreview: () => true
 })
 
 const emit = defineEmits<{

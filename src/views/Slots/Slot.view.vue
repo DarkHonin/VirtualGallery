@@ -21,12 +21,12 @@
             <div class="col-span-3">
                 <BaseInput label="Slot title" type="text" v-model="slotStore.slot.slot_name"
                     placeholder="What should it be called?" />
-                <SelectInput v-model="<Artwork>slotStore.slot.artwork" item_value="id" :options="artworkStore.artworks"
+                <SelectInput v-model="<Post>slotStore.slot.artwork" item_value="id" :options="postStore.posts"
                     placeholder="Select artwork" label="Selected Artwork">
                     <template #display="{ item }">
                         <ArtworkListItem v-if="item && item[0]" :item="item?.[0]" />
                     </template>
-                    <template #item="{ item, addItem } : { item: Artwork, addItem(e: Artwork): void }">
+                    <template #item="{ item, addItem } : { item: Post, addItem(e: Post): void }">
                         <ArtworkListItem :item="item" @click="addItem(item)" />
                     </template>
                 </SelectInput>
@@ -40,8 +40,8 @@ import BaseInput from '@/components/input/Base.input.vue'
 import TextAreaInput from '@/components/input/Textarea.input.vue'
 
 import { computed, onMounted, ref } from 'vue'
-import { type Artwork } from "@/db/artwork.model"
-import { useArtworkStore } from "@/stores/Artworks.store"
+import { type Post } from "@/db/post.model"
+import { usePostStore } from "@/stores/Post.store"
 import { useRoute, useRouter } from 'vue-router'
 import ImageInput from '@/components/input/Image.input.vue'
 import BaseButton from '@/components/button/Base.button.vue'
@@ -50,27 +50,27 @@ import SpinnerLoader from '@/components/loader/Spinner.loader.vue'
 import BaseIcon from '@/components/icon/Base.icon.vue'
 import { useSlotStore } from '@/stores/Slots.store'
 import SelectInput from '@/components/input/Select.input.vue'
-import ArtworkListItem from '@/components/artwork/Artwork.listItem.vue'
+import ArtworkListItem from '@/components/post/Post.listItem.vue'
 
 const slotStore = useSlotStore()
 const route = useRoute()
 
-const artworkStore = useArtworkStore()
+const postStore = usePostStore()
 
 const router = useRouter()
 
 
 const save = () => {
     slotStore.saveSlotDetails()
-        .then((artwork: Artwork) => {
+        .then((artwork: Post) => {
             router.push({ name: 'slot_view', params: { slotId: artwork.id } })
         })
 }
 
-const isNotFound = computed(() => <string>route.params.slotId !== 'new' && parseInt(<string>route.params.slotId) !== slotStore.slot.id);
+const isNotFound = computed(() => <string>route.params.slotId !== 'new' && !postStore.post);
 
 onMounted(() => {
-    artworkStore.preflight()
+    postStore.preflight()
 })
 
 const deleteArt = () => {

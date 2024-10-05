@@ -15,7 +15,7 @@
 
                     <template #item="{ item, itemClassString } : { item: Slot, itemClassString: string }">
                         <RouterLink :key="item.id" :to="{ name: 'slot_view', params: { slotId: item.id } }"
-                            :style="`background-image: URL(${artworkImage(<Artwork>item.artwork)})`"
+                            :style="`background-image: URL(${artworkImage(<Post>item.artwork)})`"
                             :class="itemClassString">
                             <label class="align-bottom mt-auto bg-primary p-2">{{
                                 item.slot_name
@@ -37,9 +37,9 @@
 
 <script lang="ts" setup>
 
-import { useArtworkStore } from "@/stores/Artworks.store"
+import { usePostStore } from "@/stores/Post.store"
 import BaseIcon from '@/components/icon/Base.icon.vue'
-import { type Artwork } from "@/db/artwork.model"
+import { type Post } from "@/db/post.model"
 import { supabase } from '@/db/index.db'
 import { onMounted } from 'vue'
 import PageTemplate from '@/views/Template/Page.template.vue'
@@ -51,7 +51,7 @@ import BaseGrid from "@/components/grid/Base.grid.vue"
 const store = useSlotStore()
 
 
-const artworkImage = (art?: Artwork | number) => {
+const artworkImage = (art?: Post | number) => {
     if (!art || typeof (art) == 'number') return
     const { data } = supabase.storage.from('gallery_photos').getPublicUrl(art.resource)
     return data.publicUrl

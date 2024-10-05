@@ -17,19 +17,19 @@
 </template>
 
 <script setup lang="ts">
-import { useArtwork, type Artwork } from '@/db/artwork.model';
+import { usePost, type Post } from '@/db/post.model';
 import ImageInput from '../input/Image.input.vue';
 import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps<{
-    artwork: Artwork
+    artwork: Post
 }>()
 
-const { imagePublicUrl } = useArtwork(computed(() => props.artwork))
+const { imagePublicUrl } = usePost(computed(() => props.artwork))
 const artworkFile = ref<File>()
 
 const emit = defineEmits<{
-    (e: 'update:artwork', artwork: Artwork): void
+    (e: 'update:artwork', artwork: Post): void
 }>()
 
 const metaData = ref<{
@@ -65,7 +65,7 @@ const getMetaData = (async (e?: File) => {
 
 
 
-const handleUpdate = (field: keyof Artwork, value: any) => {
+const handleUpdate = (field: keyof Post, value: any) => {
     emit('update:artwork', { ...props.artwork, [field]: value })
 }
 

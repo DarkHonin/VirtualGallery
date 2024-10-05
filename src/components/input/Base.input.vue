@@ -34,10 +34,16 @@ const mappedType = computed(() => {
     }
 })
 
-const handleUpdate = (e: Event) => {
-    const target = <HTMLInputElement>e.target
+const handleUpdate = (e: Event | string) => {
+    let target;
+    let preParse;
+    if (typeof e !== 'string') {
+        target = <HTMLInputElement>e.target
+        preParse = target.value
+    } else {
+        preParse = e
+    }
     const type = props.type
-    const preParse = target.value
     switch (type) {
         case "float":
             return emit('update:modelValue', parseFloat(preParse))
@@ -49,3 +55,11 @@ const handleUpdate = (e: Event) => {
 }
 
 </script>
+
+<style lang="scss">
+.base-input {
+    input {
+        color: black
+    }
+}
+</style>
