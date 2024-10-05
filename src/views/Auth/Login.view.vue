@@ -29,7 +29,8 @@ const handleLogin = async () => {
         loading.value = true
         await new Promise((y) => setTimeout(y, 5000))
 
-        await userStore.signIn(userEmail.value)
+        await userStore.signInWPass(userEmail.value, userPassword.value!)
+
         router.replace(redirectTo.value)
     } catch (error) {
         if (error instanceof Error) {
