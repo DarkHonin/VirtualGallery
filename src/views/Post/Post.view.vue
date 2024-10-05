@@ -5,7 +5,7 @@
             Could not find artwork
         </h2>
     </div>
-    <div v-else class="p-2 flex flex-col place-content-start w-full " style="max-width: 100vw;">
+    <div v-else class="p-2 flex flex-col place-content-start w-full " style="width: 600px; max-width: 100vw;">
         <SpinnerLoader class="m-auto" :loading="!renderedContent" :message="`Loading post '${post.title}'`">
             <template #message>
                 Loading Post <span class="text-nowrap">'{{ post.title }}'</span>
