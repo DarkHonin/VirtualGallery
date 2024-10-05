@@ -13,7 +13,7 @@ const userPassword = ref<string>()
 const loading = ref(false)
 const userStore = useUserStore()
 
-const isLocal = import.meta.env['VITE_ENV'] == "LOCAL"
+
 const router = useRouter()
 const route = useRoute()
 
@@ -28,10 +28,8 @@ const handleLogin = async () => {
     try {
         loading.value = true
         await new Promise((y) => setTimeout(y, 5000))
-        if (isLocal)
-            await userStore.signInWPass(userEmail.value, userPassword.value!)
-        else
-            await userStore.signIn(userEmail.value)
+
+        await userStore.signIn(userEmail.value)
         router.replace(redirectTo.value)
     } catch (error) {
         if (error instanceof Error) {
@@ -52,10 +50,8 @@ const handleLogin = async () => {
     <LayoutSplit :cells="3">
         <form class="vert justify-center items-center col-start-2" @submit.prevent="handleLogin">
             <BaseInput label="Email Address" v-model="userEmail" placeholder="example@mail.com" type="email" required />
-            <BaseInput label="Password" v-model="userPassword" placeholder="*********" type="password" v-if="isLocal"
-                required />
-            <BaseButton type="submit" :label="isLocal ? 'Login' : 'Send Magic Link'" :disabled="!userEmail"
-                :loading="loading" />
+            <BaseInput label="Password" v-model="userPassword" placeholder="*********" type="password" required />
+            <BaseButton type="submit" :label="'Login'" :disabled="!userEmail" :loading="loading" />
             <SpinnerLoader class="m-auto" :loading="loading" message="Logging in..." />
         </form>
     </LayoutSplit>
