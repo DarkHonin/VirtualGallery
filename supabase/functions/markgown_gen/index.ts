@@ -29,15 +29,22 @@ const imageParser = (client: SupabaseClient<Database>) => ({
     if (match) {
       const { alt_text, src, width } = match.groups ?? {};
 
-      const { data } = client.storage.from("Posts").getPublicUrl(
+      const { data } = client.storage.from("uploads").getPublicUrl(
         `posts/${src}`,
       );
+
+      console.log({ data, src });
 
       return {
         type: "image",
         raw: match[0],
         alt_text,
-        src: data.publicUrl,
+        src: Deno.env.get("ENV") == "local"
+          ? data.publicUrl.replace(
+            "http://kong:8000",
+            "http://127.0.0.1:54321",
+          )
+          : data.publicUrl,
         width,
       };
     }
@@ -60,7 +67,6 @@ Deno.serve(async (req) => {
       headers: corsHeaders,
     });
   }
-  console.log("Entered");
   try {
     const supabase = createClient<Database>(
       Deno.env.get("SUPABASE_URL") ?? "",

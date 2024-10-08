@@ -12,7 +12,7 @@
             </template>
             <template #default>
                 <h1>{{ post.title }}</h1>
-                <div v-html="renderedContent" class="pb-8 markup"></div>
+                <div v-html="renderedContent" class="pb-8"></div>
 
             </template>
         </SpinnerLoader>
