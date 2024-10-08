@@ -19,8 +19,7 @@
         </div>
 
         <div class="gap-2 flex-row flex w-full">
-            <PostEditFormItem ref="postContent" v-model:post="activePost" @update:post="updateEdit"
-                :markup="postStore._markup" />
+            <PostEditFormItem ref="postContent" v-model:post="activePost" :markup="postStore._markup" />
 
         </div>
 
