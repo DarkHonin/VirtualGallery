@@ -26,6 +26,10 @@ body {
   /* background-color: theme('colors.primary-active'); */
 }
 
+.markup {
+  max-width: 400px;
+}
+
 .markup hr {
   margin: 0.5em 0em;
 }

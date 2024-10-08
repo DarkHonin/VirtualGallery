@@ -2,6 +2,7 @@ import { computed, type Ref, unref } from "vue";
 import type { Database } from "./database.types.ts";
 import { supabase } from "./index.db";
 import { usePostStore } from "@/stores/Post.store";
+import { useMediaStore } from "@/stores/Media.store.js";
 
 export type Post = Database["public"]["Tables"]["Posts"]["Row"];
 
@@ -31,12 +32,13 @@ export const useActivePost = () => {
 };
 
 export const usePost = (post: Ref<Post> | Post) => {
+  const mediaStore = useMediaStore();
+
   const media = computed(() => {
-    return unref(post)?.media?.map((path) => {
-      const { data } = PostStorage().getPublicUrl(path);
+    return unref(post)?.media?.map((name) => {
       return {
-        url: data.publicUrl,
-        path,
+        url: mediaStore.publicUrl(name),
+        name,
       };
     }) ?? [];
   });

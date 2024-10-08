@@ -1,14 +1,58 @@
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
-import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import {
+  marked,
+  Renderer,
+} from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { Database } from "../DBTypes.ts";
 
 import { corsHeaders } from "../headers.ts";
 console.log("Hello from Functions!");
+
+const imageParser = (client: SupabaseClient<Database>) => ({
+  name: "image",
+  level: "inline", // Is this a block-level or inline-level tokenizer?
+  start(src: string) {
+    return src.match(
+      /!\[(?<alt_text>.+?)\]\((?<src>.+?)(\s*|\s*(?<width>\d+))?\)/mg,
+    )
+      ?.index;
+  }, // Hint to Marked.js to stop and check for a match
+  tokenizer(src: string) {
+    const match = new RegExp(
+      /!\[(?<alt_text>.+?)\]\((?<src>.+?)(\|(?<width>\d+))?\)/mg,
+    ).exec(src);
+    if (match) {
+      const { alt_text, src, width } = match.groups ?? {};
+
+      const { data } = client.storage.from("Posts").getPublicUrl(
+        `posts/${src}`,
+      );
+
+      return {
+        type: "image",
+        raw: match[0],
+        alt_text,
+        src: data.publicUrl,
+        width,
+      };
+    }
+
+    // return false to use original codespan tokenizer
+    return false;
+  },
+  renderer(
+    { alt_text, src, width }: { alt_text: string; src: string; width: string },
+  ) {
+    return `<img src="${src}" alt="${alt_text}" ${
+      width ? `width='${width}'` : ""
+    } />`;
+  },
+});
 
 Deno.serve(async (req) => {
   if (req.method == "OPTIONS") {
@@ -37,7 +81,11 @@ Deno.serve(async (req) => {
       throw error;
     }
 
-    console.log(data);
+    marked.use({
+      extensions: [
+        imageParser(supabase),
+      ],
+    });
 
     return new Response(JSON.stringify(marked.parse(data.content)), {
       headers: {

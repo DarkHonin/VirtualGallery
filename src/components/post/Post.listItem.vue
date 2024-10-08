@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { usePost as usePost, type Post, type PostPreview } from '@/db/post.model';
+import { PostStorage, usePost as usePost, type Post, type PostPreview } from '@/db/post.model';
 import { computed, onMounted, ref } from 'vue';
 import BaseIcon from '../icon/Base.icon.vue';
 import PostService from '@/services/PostEdit.service';

@@ -5,7 +5,7 @@
             Could not find artwork
         </h2>
     </div>
-    <div v-else class="p-2 flex flex-col place-content-start w-full" style="width: 660px;">
+    <div v-else class="p-2 flex flex-col place-content-start w-full" style="width: 800px;">
         <div class="flex gap-2 h-min w-full max-h-min ">
             <BaseButton color="positive" label="Save" :disabled="!activePost.title" :loading="postStore.isActing"
                 @click="save()" />
@@ -21,14 +21,6 @@
         <div class="gap-2 flex-row flex w-full">
             <PostEditFormItem ref="postContent" v-model:post="activePost" @update:post="updateEdit"
                 :markup="postStore._markup" />
-
-            <div class="flex flex-col gap-2">
-                <h3>Media</h3>
-                <ImageInput :model-value="undefined" :show-preview="false" @update:model-value="imageUpload" />
-
-                <PostMediaListItem @insertImage='insertImage' @deleteImage='deleteImage' v-for="i in activePost.media"
-                    :path="i" />
-            </div>
 
         </div>
 
@@ -71,24 +63,6 @@ const imageUpload = (e: File) => {
 
 const postContent = ref<typeof PostEditFormItem>()
 
-const insertImage = (url: string) => {
-    if (!postContent.value) return
-    console.log(url)
-    postContent.value.insertContent(`![alt text](${url})`)
-}
-
-const deleteImage = async (path: string, publicUrl: string) => {
-    const status = await window.confirm("Deleting this media will remove it from the database")
-    if (!status) return
-
-    await postStore.deleteMedia(path)
-
-    if (!postStore.post.content) return
-    const match = `![alt text](${publicUrl})`
-    while (postStore.post.content.indexOf(match) > -1)
-        postStore.post.content = postStore.post.content.replace(match, '')
-}
-
 const save = () => {
     postStore.savePost()
         .then((a: Post) => {
@@ -99,21 +73,6 @@ const save = () => {
 
 const isNotFound = computed(() => (!Boolean(userStore.user) && <string>route.params.postId == 'new') || <string>route.params.postId !== 'new' && parseInt(<string>route.params.postId) !== postStore.post.id);
 
-
-var timeout: NodeJS.Timeout | undefined = undefined
-
-const updateEdit = () => {
-    const doTimeout = () =>
-        timeout = setTimeout(async () => {
-            save()
-            clearTimeout(timeout)
-            timeout = undefined
-        }, 2000)
-    if (!timeout)
-        return doTimeout()
-    clearTimeout(timeout)
-    doTimeout()
-}
 
 const deleteArt = () => {
     postStore.deletePost().then(() => router.push(posts()))

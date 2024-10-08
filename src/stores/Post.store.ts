@@ -13,6 +13,7 @@ import {
 import { useUserStore } from "./User.store";
 import PostService from "@/services/PostEdit.service";
 import PostEditService from "@/services/PostEdit.service";
+import { useMediaStore } from "./Media.store";
 
 export const PostStoreActions = {
   loading: "Loading Posts",
@@ -42,7 +43,7 @@ export const usePostStore = defineStore("ArtworkStore", {
   }),
   getters: {
     posts: ({ _posts: _artworks }) => _artworks ?? [],
-    post: ({ _activePost: _activeArtwork }) => _activeArtwork ?? <Post> {},
+    post: ({ _activePost }) => _activePost ?? <Post> {},
     ...artworkStoreStateActions.getters,
   },
   actions: {
@@ -63,27 +64,32 @@ export const usePostStore = defineStore("ArtworkStore", {
         this,
         "loadingArtwork",
         async () => {
-          this.clearPost();
-          const { data, error } = await PostTable().select().eq("id", id)
-            .single();
-          if (error || !data) throw error || "Could not find artwork";
+          try {
+            const { data, error } = await PostTable().select().eq("id", id)
+              .single();
+            if (error || !data) throw error || "Could not find artwork";
 
-          if (!this._posts) this._posts = [];
+            if (!this._posts) this._posts = [];
 
-          const found = this._posts?.find((e, i, arr) => {
-            if (e.id == id) return Boolean(this._posts![i] = e);
-          });
+            const found = this._posts?.find((e, i, arr) => {
+              if (e.id == id) return Boolean(this._posts![i] = e);
+            });
 
-          if (!found) this._posts?.push(<Post> data);
+            if (!found) this._posts?.push(<Post> data);
 
-          this._activePost = <Post> data;
-          this._cachedPost = JSON.parse(JSON.stringify(data));
-          if (this._activePost.content) {
-            PostService.renderContent(this._activePost.id).then((content) =>
-              this._markup = content
-            );
+            this._activePost = <Post> data;
+            this._cachedPost = JSON.parse(JSON.stringify(data));
+            if (this._activePost.content) {
+              PostService.renderContent(this._activePost.id).then((content) =>
+                this._markup = content
+              );
+            }
+            await useMediaStore().fetchMediaForPost(this._activePost.id);
+            return data;
+          } catch (err) {
+            this.clearPost();
+            throw err;
           }
-          return data;
         },
       );
     },
@@ -91,7 +97,17 @@ export const usePostStore = defineStore("ArtworkStore", {
       if (!this.post) throw "No active artwork to save";
       return artworkStoreStateActions.runAction(this, "save", async () => {
         await new Promise((y) => setTimeout(y, 1000));
+
+        const mediaStore = useMediaStore();
+
         if (this.post!.id) {
+          const newMedia = await mediaStore.publishNewMedia(this.post.id);
+          this.post.media = this.post.media.concat(newMedia);
+
+          const removed = await mediaStore.deleteRemovedMedia();
+          console.log(removed);
+          this.post.media = this.post.media.filter((e) => !removed.includes(e));
+
           const update = await PostTable().update(this.post!).eq(
             "id",
             this.post!.id,
@@ -100,14 +116,18 @@ export const usePostStore = defineStore("ArtworkStore", {
           if (update.error) {
             throw update.error ?? "Something went wrong during the save";
           }
+
           return this.loadPost(this.post!.id);
         } else {
+          const newMedia = await mediaStore.publishNewMedia(NaN);
+          if (!this.post.media) this.post.media = [];
+          this.post.media = this.post.media.concat(newMedia);
           const update = await PostTable().insert(this.post!).select()
             .single();
           if (update.error || !update.data) {
             throw update.error ?? "Something went wrong during the save";
           }
-
+          mediaStore.clearMediaCache(NaN);
           return this.loadPost(update.data.id);
         }
       });
@@ -128,35 +148,18 @@ export const usePostStore = defineStore("ArtworkStore", {
         await this.savePost();
       });
     },
-    deleteMedia(artifactPath: string) {
-      return artworkStoreStateActions.runAction(
-        this,
-        "deleteMedia",
-        async () => {
-          if (!this._activePost) throw "No active post";
-          console.info("Deleting media: ", artifactPath);
-          const removedAsset = await PostStorage().remove([
-            artifactPath,
-          ]);
-
-          if (removedAsset.error) {
-            throw removedAsset.error ?? "Could not delete artwork resource";
-          }
-
-          this._activePost.media = this._activePost.media.filter((e) =>
-            e !== artifactPath
-          );
-
-          await PostService.updatePost(this._activePost);
-        },
-      );
-    },
     deletePost() {
       return artworkStoreStateActions.runAction(this, "delete", async () => {
         if (!this._activePost) throw "No active post";
-        const promises = this._activePost.media.map(this.deleteMedia);
-        console.log(promises);
-        await Promise.all(promises);
+        const mediaStore = useMediaStore();
+
+        console.log(this._activePost.media);
+
+        this._activePost.media.forEach((media) => {
+          mediaStore.removeMedia(this._activePost!.id, media);
+        });
+
+        await mediaStore.deleteRemovedMedia();
 
         await PostEditService.deletePost(this._activePost.id);
 

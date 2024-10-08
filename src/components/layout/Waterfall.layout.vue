@@ -21,5 +21,6 @@
     align-items: center;
     overflow-y: auto;
     padding-bottom: 30px;
+    overflow-x: hidden;
 }
 </style>
