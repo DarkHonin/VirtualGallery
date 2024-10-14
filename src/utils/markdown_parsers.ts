@@ -3,7 +3,7 @@ const imageParserRegex =
 
 export const imageParser = (media: { [mediaName: string]: string }) => ({
     name: "image",
-    level: "inline", // Is this a block-level or inline-level tokenizer?
+    level: "inline" as "inline", // Is this a block-level or inline-level tokenizer?
     start(src: string) {
         return src.match(imageParserRegex)
             ?.index;

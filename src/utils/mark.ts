@@ -8,6 +8,7 @@ export const parseMarkdown = (
     const { media } = useActivePost();
     marked.use({
         extensions: [
+            // @ts-ignore
             imageParser(media.value),
         ],
     });

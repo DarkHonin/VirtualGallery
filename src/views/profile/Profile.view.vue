@@ -37,7 +37,7 @@ import { RouterView } from 'vue-router';
 
 const userStore = useUserStore()
 
-const services = computed<{ [s: string]: string }>(() => {
+const services = computed<{ [s: string]: string | undefined }>(() => {
     const availableServies: Database["public"]["Enums"]["oauthprovider"][] = ["tumblr"]
     return Object.fromEntries(availableServies.map(s => {
         const service = userStore._profile?.oauth_tokens.find(({ service }) => s == service)
