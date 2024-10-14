@@ -26,7 +26,7 @@ body {
   /* background-color: theme('colors.primary-active'); */
 }
 
-.markup {
+.markup.edit {
   max-width: 400px;
 }
 
@@ -34,9 +34,9 @@ body {
   margin: 0.5em 0em;
 }
 .markup img {
-  margin: 1em 0em;
+  margin: 0em 1em;
 }
 
 .markup p {
-  margin: 1em 0em;
+  margin: 1em;
 }

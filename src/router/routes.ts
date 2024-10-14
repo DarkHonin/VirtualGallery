@@ -12,9 +12,10 @@ export const auth = (
   name: "auth",
   query: { returnTo },
 });
-export const profile = () => ({ name: "profile" });
 export const posts = () => ({ name: "posts" });
 export const post = (postId?: Post["id"] | "new") => ({
   name: "artwork_view",
   ...(postId ? { params: { postId } } : {}),
 });
+
+export const profile = () => ({ name: "profile" });

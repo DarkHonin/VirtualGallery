@@ -33,7 +33,7 @@ export default {
         return true;
     },
     renderContent: async (postId: number): Promise<string> => {
-        const data = await api("markgown_gen", {
+        const data = await api("markdown_gen", {
             body: JSON.stringify({ postId }),
         });
         console.log(data);

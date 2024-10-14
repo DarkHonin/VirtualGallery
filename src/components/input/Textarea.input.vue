@@ -9,7 +9,7 @@
                         :placeholder="placeholder" @input="handleUpdate($event)">{{ modelValue }}</textarea>
                 </div>
                 <div v-html="processedMarkup" style="color: white"
-                    class=" flex-1 p-2 border-background2 border-2 markup">
+                    class=" flex-1 p-2 border-background2 border-2 markup edit">
                 </div>
                 <div class="absolute p-2 z-50 " style="color: white" ref="widget"
                     :style="{ display: widgetOffset ? 'block' : 'none', ...(widgetOffset ?? {}) }"
@@ -28,9 +28,10 @@ import { computed, onMounted, ref } from 'vue';
 import BaseInput from './Base.input.vue'
 import { type BaseInputProps } from './input.types'
 import BaseIcon from '../icon/Base.icon.vue';
-import { toMarkdown as toMarkdown, toMarkup } from '@/utils/mark';
+import { parseMarkdown, } from '@/utils/mark';
 import { useMediaStore } from '@/stores/Media.store';
 import { useRoute } from 'vue-router';
+
 
 
 const props = defineProps<BaseInputProps>()
@@ -93,7 +94,7 @@ const widgetOffset = ref()
 
 
 const processedMarkup = computed(() => {
-    const ret = toMarkup(props.modelValue as string ?? "", postMedia.value ?? {})
+    const ret = parseMarkdown(props.modelValue as string ?? "")
     return ret
 
 })
@@ -117,7 +118,6 @@ const route = useRoute()
 
 const postId = computed(() => parseInt(route.params.postId as string))
 
-const postMedia = computed(() => mediaStore.media(postId.value))
 const mediaStore = useMediaStore()
 
 

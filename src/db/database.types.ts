@@ -34,32 +34,43 @@ export type Database = {
   }
   public: {
     Tables: {
-      Artworks: {
+      OAuthTokens: {
         Row: {
+          access: string
           created_at: string
-          description: string[] | null
-          externalLinks: string[] | null
+          expires_in: number
           id: number
-          resources: string[] | null
-          title: string | null
+          refresh: string
+          service: Database["public"]["Enums"]["oauthprovider"]
+          user: string
         }
         Insert: {
+          access: string
           created_at?: string
-          description?: string[] | null
-          externalLinks?: string[] | null
+          expires_in: number
           id?: number
-          resources?: string[] | null
-          title?: string | null
+          refresh: string
+          service: Database["public"]["Enums"]["oauthprovider"]
+          user: string
         }
         Update: {
+          access?: string
           created_at?: string
-          description?: string[] | null
-          externalLinks?: string[] | null
+          expires_in?: number
           id?: number
-          resources?: string[] | null
-          title?: string | null
+          refresh?: string
+          service?: Database["public"]["Enums"]["oauthprovider"]
+          user?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "OAuthTokens_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       Posts: {
         Row: {
@@ -88,6 +99,32 @@ export type Database = {
         }
         Relationships: []
       }
+      Profiles: {
+        Row: {
+          created_at: string
+          id: number
+          user: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          user: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Profiles_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -96,7 +133,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      oauthprovider: "tumblr"
     }
     CompositeTypes: {
       [_ in never]: never

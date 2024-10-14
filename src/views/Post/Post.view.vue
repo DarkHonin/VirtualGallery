@@ -6,13 +6,14 @@
         </h2>
     </div>
     <div v-else class="p-2 flex flex-col place-content-start w-full " style="width: 600px; max-width: 100vw;">
-        <SpinnerLoader class="m-auto" :loading="!renderedContent" :message="`Loading post '${post.title}'`">
+        <SpinnerLoader class="m-auto" :loading="!renderedContent || error"
+            :message="error ?? `Loading post '${post.title}'`">
             <template #message>
                 Loading Post <span class="text-nowrap">'{{ post.title }}'</span>
             </template>
             <template #default>
                 <h1>{{ post.title }}</h1>
-                <div v-html="renderedContent" class="pb-8"></div>
+                <div v-html="renderedContent" class="pb-8 markup"></div>
 
             </template>
         </SpinnerLoader>
@@ -35,8 +36,14 @@ const post = computed(() => postStore.post)
 const route = useRoute()
 const isNotFound = computed(() => (<string>route.params.postId == 'new') || <string>route.params.postId !== 'new' && parseInt(<string>route.params.postId) !== post.value.id);
 
-let timeout: NodeJS.Timeout | undefined = undefined;
-const renderedContent = computed(() => postStore._markup)
+const renderedContent = ref<string>()
+const error = ref()
+
+onMounted(() => {
+    PostEditService.renderContent(post.value.id).catch(err => error.value = "Could not fetch rendered markup").then((content) =>
+        renderedContent.value = content
+    );
+})
 
 
 

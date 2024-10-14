@@ -14,6 +14,7 @@ export const PostStorage = () => supabase.storage.from("uploads");
 
 export const useActivePost = () => {
   const artworkStore = usePostStore();
+  const mediaStore = useMediaStore();
 
   const activePost = computed({
     get: () => artworkStore.post,
@@ -25,9 +26,11 @@ export const useActivePost = () => {
     set: (nv: string | undefined) => (unref(activePost).title = nv ?? null),
   });
 
+  const media = computed(() => mediaStore.media(activePost.value.id));
   return {
     activePost,
     title,
+    media,
   };
 };
 

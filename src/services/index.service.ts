@@ -1,28 +1,12 @@
-type AvailableEndpoint = "vue-signin" | "markgown_gen";
+import { supabase } from "@/db/index.db";
+
+type AvailableEndpoint = "user_profile" | "markdown_gen" | "vue-signin";
 
 export const api = async (
     endpoint: AvailableEndpoint,
-    opts?: Parameters<typeof fetch>[1],
+    opts?: any,
 ) => {
-    const result = await fetch(
-        [import.meta.env["VITE_SUPABASE_URL"], "functions/v1", endpoint].join(
-            "/",
-        ),
-        {
-            ...opts,
-            method: opts?.body ? "POST" : "GET",
-            headers: {
-                ...opts?.headers,
-                Authorization: import.meta.env["VITE_SUPABASE_ANNON_KEY"],
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers":
-                    "authorization, x-client-info, apikey, content-type, Access-Control-Allow-Origin, Access-Control-Allow-Headers",
-            },
-        },
-    );
-    const body = await result.json();
-    if (result.status !== 200) {
-        throw body;
-    }
-    return body;
+    const { data, error } = await supabase.functions.invoke(endpoint, opts);
+    if (error) throw error;
+    return data;
 };

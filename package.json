@@ -16,6 +16,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.44.4",
     "base64-arraybuffer": "^1.0.2",
+    "marked": "^14.1.2",
     "pinia": "^2.1.7",
     "scss": "^0.2.4",
     "vue": "^3.4.29",

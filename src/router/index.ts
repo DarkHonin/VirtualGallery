@@ -8,9 +8,10 @@ import { useUserStore } from "@/stores/User.store";
 import * as routeNames from "./routes";
 import LandingView from "@/views/Landing.view.vue";
 import postRoute from "./post.route";
+import profileRoutes from "./profile.routes";
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
@@ -27,16 +28,7 @@ const router = createRouter({
       path: "/",
       name: "root",
       children: [
-        {
-          path: "/profile",
-          ...routeNames.profile(),
-          component: () => import("../views/Profile.view.vue"),
-          async beforeEnter(from, to, next) {
-            const store = useUserStore();
-            if (!store.user) next({ name: "auth" });
-            else next();
-          },
-        },
+        profileRoutes,
         postRoute,
       ],
     },
@@ -49,6 +41,11 @@ const router = createRouter({
     //   component: () => import('../views/AboutView.vue')
     // }
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  useUserStore().preflight();
+  next();
 });
 
 export default router;

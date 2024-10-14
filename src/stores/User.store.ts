@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { supabase } from "@/db/index.db";
 import { defineStateActions, type StoreState } from "./util/StateActions.util";
 import { api } from "@/services/index.service";
+import type { Profile } from "@/db/Profile.model";
 
 export const userStoreActions = {
   loading: "Loading Session",
@@ -14,11 +15,13 @@ const userStoreStateActions = defineStateActions(userStoreActions);
 
 interface UserStore extends StoreState<typeof userStoreActions> {
   _session?: Session;
+  _profile?: Profile;
 }
 
 export const useUserStore = defineStore("UserStore", {
   state: (): UserStore => ({
     _session: undefined,
+    _profile: undefined,
     ...userStoreStateActions.state,
   }),
   getters: {
@@ -28,6 +31,7 @@ export const useUserStore = defineStore("UserStore", {
   actions: {
     preflight() {
       return userStoreStateActions.runAction(this, "loading", async () => {
+        this._profile = await api("user_profile");
         return supabase.auth.getSession().then(({ data }) => {
           if (!data || !data.session) return (this._session = undefined);
           this._session = data.session;
@@ -38,7 +42,10 @@ export const useUserStore = defineStore("UserStore", {
       return userStoreStateActions.runAction(
         this,
         "signIn",
-        () => api("vue-signin", { body: JSON.stringify({ email }) }),
+        async () => {
+          await api("vue-signin", { body: JSON.stringify({ email }) });
+          this._profile = await api("user_profile");
+        },
       );
     },
     async signInWPass(email: string, password: string) {

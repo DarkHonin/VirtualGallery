@@ -79,11 +79,7 @@ export const usePostStore = defineStore("ArtworkStore", {
 
             this._activePost = <Post> data;
             this._cachedPost = JSON.parse(JSON.stringify(data));
-            if (this._activePost.content) {
-              PostService.renderContent(this._activePost.id).then((content) =>
-                this._markup = content
-              );
-            }
+
             await useMediaStore().fetchMediaForPost(this._activePost.id);
             return data;
           } catch (err) {
