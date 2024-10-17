@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import SpinnerLoader from '@/components/loader/Spinner.loader.vue';
 import type { Post } from '@/db/post.model';
-import PostEditService from '@/services/PostEdit.service';
+import PostEditService from '@/services/Post.service';
 import { usePostStore } from '@/stores/Post.store';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';

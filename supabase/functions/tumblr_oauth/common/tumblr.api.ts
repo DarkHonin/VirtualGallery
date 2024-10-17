@@ -10,6 +10,7 @@ export const link_to_tumblr = async (client: Client, code: string) => {
         code,
         client_id: Deno.env.get("TUMBLR_KEY") ?? "",
         client_secret: Deno.env.get("TUMBLR_SECRET") ?? "",
+        redirect_uri: "http://localhost:5173/profile/tumblr",
     }).forEach(([k, v]) => formData.append(k, v));
 
     const resp = await fetch(

@@ -22,7 +22,7 @@
 import { PostStorage, usePost as usePost, type Post, type PostPreview } from '@/db/post.model';
 import { computed, onMounted, ref } from 'vue';
 import BaseIcon from '../icon/Base.icon.vue';
-import PostService from '@/services/PostEdit.service';
+import PostService from '@/services/Post.service';
 import BaseLoader from '../loader/Base.loader.vue';
 import SpinnerLoader from '../loader/Spinner.loader.vue';
 

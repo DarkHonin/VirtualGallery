@@ -2,7 +2,7 @@
     <div v-if="isNotFound" class="px-2 w-full flex flex-col justify-center items-center h-full">
         <BaseIcon name="error" class="text-button-negative" />
         <h2>
-            Could not find artwork
+            Could not find post
         </h2>
     </div>
     <div v-else class="p-2 flex flex-col place-content-start w-full" style="width: 800px;">
@@ -11,11 +11,14 @@
                 @click="save()" />
             <BaseButton v-if="activePost.id" color="negative" label="Delete" :disabled="!activePost.id"
                 :loading="postStore.isActing" @click="deleteArt()" />
-            <label v-show="postStore.isActing" class="ml-auto items-center flex gap-2">
+
+            <label v-show="postStore.isActing" class="m-auto items-center flex gap-2">
                 <p>{{ postStore.activeActions.join(' - ') }}
                 </p>
                 <SpinnerLoader :loading="true" />
             </label>
+            <PublishButton class="ml-auto" :publish-string="activePost.publish ?? undefined"
+                @update:publish-string="(nv: string | null) => { activePost.publish = nv; save() }" />
         </div>
 
         <div class="gap-2 flex-row flex w-full">
@@ -42,11 +45,12 @@ import BaseIcon from '@/components/icon/Base.icon.vue'
 import { post, posts } from '@/router/routes'
 import PostSetupFormItem from '@/components/post/PostEdit.formItem.vue'
 import TextareaInput from '@/components/input/Textarea.input.vue'
-import PostService from '@/services/PostEdit.service'
+import PostService from '@/services/Post.service'
 import BaseInput from '@/components/input/Base.input.vue'
 import PostEditFormItem from '@/components/post/PostEdit.formItem.vue'
 import PostMediaListItem from '@/components/post/PostMedia.listItem.vue'
 import { useUserStore } from '@/stores/User.store'
+import PublishButton from '@/components/button/Publish.button.vue'
 
 const postStore = usePostStore()
 const route = useRoute()

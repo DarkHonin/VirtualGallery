@@ -1,5 +1,5 @@
 <template>
-    <div class="waterfall-layout">
+    <div class="waterfall-layout" ref="root">
 
         <slot />
 
@@ -7,14 +7,19 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 
 
+const root = ref<HTMLElement>()
+defineExpose({
+    $el: root
+})
 
 </script>
 
 <style lang="scss">
 .waterfall-layout {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: start;

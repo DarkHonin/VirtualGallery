@@ -5,19 +5,13 @@
             <div class="flex justify-stretch items-stretch">
 
                 <div class="grow-wrap flex-1" :replicated-value="modelValue">
-                    <textarea @contextmenu.prevent="handleInsertRequest" class="bg-background2" ref="TextArea"
-                        :placeholder="placeholder" @input="handleUpdate($event)">{{ modelValue }}</textarea>
+                    <textarea class="bg-background2" ref="TextArea" :placeholder="placeholder"
+                        @input="handleUpdate($event)">{{ modelValue }}</textarea>
                 </div>
                 <div v-html="processedMarkup" style="color: white"
                     class=" flex-1 p-2 border-background2 border-2 markup edit">
                 </div>
-                <div class="absolute p-2 z-50 " style="color: white" ref="widget"
-                    :style="{ display: widgetOffset ? 'block' : 'none', ...(widgetOffset ?? {}) }"
-                    contenteditable="false">
-                    <div class="p-2 border border-4 border-primary bg-background rounded flex items-center">
-                        <BaseIcon name="image" size="md" class="p-1 cursor-pointer" @click="addMedia" />
-                    </div>
-                </div>
+
             </div>
         </template>
     </BaseInput>
@@ -87,7 +81,7 @@ defineExpose({
 })
 
 const root = ref<HTMLElement>()
-const widget = ref<HTMLElement>()
+
 
 const widgetOffset = ref()
 
@@ -99,21 +93,6 @@ const processedMarkup = computed(() => {
 
 })
 
-const handleInsertRequest = (event: Event) => {
-    const { clientX, clientY } = (event as MouseEvent)
-
-    if (!widget.value) return
-
-    const { width, height } = widget.value.getBoundingClientRect()
-
-    widgetOffset.value = {
-        left: `${clientX}px`,
-        top: `${clientY}px`
-    }
-}
-
-
-
 const route = useRoute()
 
 const postId = computed(() => parseInt(route.params.postId as string))
@@ -121,18 +100,7 @@ const postId = computed(() => parseInt(route.params.postId as string))
 const mediaStore = useMediaStore()
 
 
-const addMedia = () => {
 
-    const input = document.createElement('input')
-    input.addEventListener('change', () => {
-        if (!input.files?.length) return
-        const name = mediaStore.registerMedia(postId.value, input.files[0])
-        injectImage(name)
-        widgetOffset.value = undefined
-    })
-    input.setAttribute('type', "file")
-    input.click()
-}
 
 </script>
 

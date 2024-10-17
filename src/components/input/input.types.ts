@@ -7,6 +7,7 @@ export interface BaseInputProps {
     | "textarea"
     | "image"
     | "password"
+    | "date"
     | "select";
   required?: boolean;
   label?: string;

@@ -1,5 +1,5 @@
 <template>
-    <RouterView #default="{ Component }">
+    <RouterView #default="{ Component, route }">
         <template v-if="!Component">
             <div class="flex">
                 <div class="border rounded-sm border-primary p-2 m-2">
@@ -23,7 +23,10 @@
                 </div>
             </div>
         </template>
-        <component v-else :is="Component" />
+        <template v-else>
+            <component :is="Component" :route="route" />
+
+        </template>
     </RouterView>
 </template>
 
@@ -53,8 +56,8 @@ const handleTumblrLink = () => {
         client_id,
         response_type: 'code',
         scope: 'write offline_access',
-        state: useUserStore().user!.id,
-        redirect_uri: "http://localhost:5173/VirtualGallery/#/profile/tumblr"
+        state: "tumblr",
+        ...(import.meta.env.VITE_ENV == 'LOCAL' ? { redirect_uri: "http://localhost:5173/profile/tumblr" } : {})
     }).toString()}`
 
     var win = window.open(url, '_blank');

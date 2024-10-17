@@ -26,7 +26,7 @@ export const useActivePost = () => {
     set: (nv: string | undefined) => (unref(activePost).title = nv ?? null),
   });
 
-  const media = computed(() => mediaStore.media(activePost.value.id));
+  const media = computed(() => mediaStore.media(activePost.value.id ?? NaN));
   return {
     activePost,
     title,

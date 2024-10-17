@@ -31,10 +31,11 @@ export const useUserStore = defineStore("UserStore", {
   actions: {
     preflight() {
       return userStoreStateActions.runAction(this, "loading", async () => {
-        this._profile = await api("user_profile");
         return supabase.auth.getSession().then(({ data }) => {
           if (!data || !data.session) return (this._session = undefined);
           this._session = data.session;
+        }).then(async () => {
+          if (this.user) this._profile = await api("user_profile");
         });
       });
     },
@@ -44,7 +45,7 @@ export const useUserStore = defineStore("UserStore", {
         "signIn",
         async () => {
           await api("vue-signin", { body: JSON.stringify({ email }) });
-          this._profile = await api("user_profile");
+          if (this.user) this._profile = await api("user_profile");
         },
       );
     },

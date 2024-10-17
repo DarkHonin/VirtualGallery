@@ -77,7 +77,8 @@ export type Database = {
           content: string | null
           created_at: string
           id: number
-          media: string[]
+          media: string[] | null
+          publish: string | null
           tags: string[] | null
           title: string | null
         }
@@ -85,7 +86,8 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: number
-          media?: string[]
+          media?: string[] | null
+          publish?: string | null
           tags?: string[] | null
           title?: string | null
         }
@@ -93,7 +95,8 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: number
-          media?: string[]
+          media?: string[] | null
+          publish?: string | null
           tags?: string[] | null
           title?: string | null
         }

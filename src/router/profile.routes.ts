@@ -9,7 +9,7 @@ export default {
     children: [
         {
             name: "tumblr-link",
-            path: "/tumblr",
+            path: "tumblr",
             component: import("../views/profile/Profile.link.vue"),
             props: {
                 service: ProfileLinks.tumblr,

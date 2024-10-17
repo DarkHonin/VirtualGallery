@@ -11,8 +11,8 @@ import {
   PostTable,
 } from "@/db/post.model";
 import { useUserStore } from "./User.store";
-import PostService from "@/services/PostEdit.service";
-import PostEditService from "@/services/PostEdit.service";
+import PostService from "@/services/Post.service";
+import PostEditService from "@/services/Post.service";
 import { useMediaStore } from "./Media.store";
 
 export const PostStoreActions = {
@@ -98,6 +98,7 @@ export const usePostStore = defineStore("ArtworkStore", {
 
         if (this.post!.id) {
           const newMedia = await mediaStore.publishNewMedia(this.post.id);
+          if (!this.post.media) this.post.media = [];
           this.post.media = this.post.media.concat(newMedia);
 
           const removed = await mediaStore.deleteRemovedMedia();
@@ -149,8 +150,7 @@ export const usePostStore = defineStore("ArtworkStore", {
         if (!this._activePost) throw "No active post";
         const mediaStore = useMediaStore();
 
-        console.log(this._activePost.media);
-
+        if (!this._activePost.media) this._activePost.media = [];
         this._activePost.media.forEach((media) => {
           mediaStore.removeMedia(this._activePost!.id, media);
         });

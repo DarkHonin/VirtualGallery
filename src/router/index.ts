@@ -9,6 +9,7 @@ import * as routeNames from "./routes";
 import LandingView from "@/views/Landing.view.vue";
 import postRoute from "./post.route";
 import profileRoutes from "./profile.routes";
+import { useBlogStore } from "@/stores/Blog.store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,10 @@ const router = createRouter({
     {
       path: "/",
       ...routeNames.home(),
+      beforeEnter(to, from, next) {
+        useBlogStore().loadPosts();
+        next();
+      },
       component: LandingView,
     },
     {
