@@ -18,13 +18,17 @@ const props = withDefaults(defineProps<IconProps>(), {
     font-size: 16px;
     line-height: 16px;
 
-    [size="sm"] {
+    &[size="sm"] {
         font-size: 10px;
         line-height: 10px;
     }
 
-    [size="lg"] {
+    &[size="lg"] {
         font-size: 24px;
+    }
+
+    &[size="xl"] {
+        font-size: 48px;
     }
 
 }

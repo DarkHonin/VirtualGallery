@@ -1,19 +1,16 @@
 <template>
-    <div v-if="isNotFound" class="px-2 w-full flex flex-col justify-center items-center h-full">
-        <BaseIcon name="error" class="text-button-negative" />
-        <h2>
-            Could not find artwork
-        </h2>
-    </div>
-    <div v-else class="p-2 flex flex-col place-content-start w-full " style="width: 600px; max-width: 100vw;">
-        <SpinnerLoader class="m-auto" :loading="!renderedContent || error"
-            :message="error ?? `Loading post '${post.title}'`">
-            <template #message>
-                Loading Post <span class="text-nowrap">'{{ post.title }}'</span>
-            </template>
+
+    <div class="p-2 flex flex-col place-content-start w-full" style="width: 600px; max-width: 100vw;">
+        <SpinnerLoader class="m-auto" :loading="blogStore.isActing" message="Loading post">
             <template #default>
-                <h1>{{ post.title }}</h1>
-                <div v-html="renderedContent" class="pb-8 markup"></div>
+                <template v-if="isNotFound">
+                    Could not find post
+                </template>
+                <template v-else>
+                    <h1><span>{{ blogStore.active!.title }}</span><span class="text-sm block">{{ new
+                        Date(Date.parse(blogStore.active!.publish!)).toLocaleDateString() }}</span></h1>
+                    <div v-html="blogStore.active!.content" class="pb-8 markup"></div>
+                </template>
 
             </template>
         </SpinnerLoader>
@@ -25,25 +22,29 @@
 import SpinnerLoader from '@/components/loader/Spinner.loader.vue';
 import type { Post } from '@/db/post.model';
 import PostEditService from '@/services/Post.service';
+import { useBlogStore } from '@/stores/Blog.store';
 import { usePostStore } from '@/stores/Post.store';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-const postStore = usePostStore()
-
-const post = computed(() => postStore.post)
+const blogStore = useBlogStore()
 
 const route = useRoute()
-const isNotFound = computed(() => (<string>route.params.postId == 'new') || <string>route.params.postId !== 'new' && parseInt(<string>route.params.postId) !== post.value.id);
+const postId = computed(() => parseInt(route.params.postId as string))
+const isNotFound = computed(() => Boolean(!blogStore.active || error.value));
 
-const renderedContent = ref<string>()
-const error = ref()
+onMounted(async () => {
+    try {
+        blogStore.loadPost(postId.value)
 
-onMounted(() => {
-    PostEditService.renderContent(post.value.id).catch(err => error.value = "Could not fetch rendered markup").then((content) =>
-        renderedContent.value = content
-    );
+    } catch (e) {
+        error.value = e
+        console.error(e)
+    }
 })
+
+
+const error = ref()
 
 
 

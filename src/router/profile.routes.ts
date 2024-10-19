@@ -5,6 +5,9 @@ import { ProfileLinks } from "@/utils/ProfileLinks";
 export default {
     path: "/profile",
     ...routeNames.profile(),
+    meta: {
+        requiresAuth: true,
+    },
     component: () => import("../views/profile/Profile.view.vue"),
     children: [
         {
@@ -13,6 +16,9 @@ export default {
             component: import("../views/profile/Profile.link.vue"),
             props: {
                 service: ProfileLinks.tumblr,
+            },
+            meta: {
+                requiresAuth: true,
             },
         },
     ],

@@ -5,6 +5,8 @@ import type {
   RouteLocationAsRelativeGeneric,
 } from "vue-router";
 
+export const NotFound = () => ({ name: "NotFound" });
+
 export const home = () => ({ name: "home" });
 export const auth = (
   returnTo?: string,

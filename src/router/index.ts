@@ -10,6 +10,7 @@ import LandingView from "@/views/Landing.view.vue";
 import postRoute from "./post.route";
 import profileRoutes from "./profile.routes";
 import { useBlogStore } from "@/stores/Blog.store";
+import NotFoundView from "@/views/Common/NotFound.view.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,9 @@ const router = createRouter({
     {
       path: "/auth",
       ...routeNames.auth(),
+      meta: {
+        requiresAuth: true,
+      },
       component: () => import("../views/Auth/Login.view.vue"),
     },
 
@@ -37,20 +41,25 @@ const router = createRouter({
         postRoute,
       ],
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
+    {
+      path: "/",
+      ...routeNames.NotFound(),
+      component: NotFoundView,
+    },
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  useUserStore().preflight();
-  next();
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth) {
+    const userStore = useUserStore();
+    await userStore.preflight();
+    if (userStore.user) {
+      return next();
+    }
+    return next(routeNames.NotFound());
+  } else {
+    next();
+  }
 });
 
 export default router;

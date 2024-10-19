@@ -34,7 +34,7 @@ export const useActivePost = () => {
   };
 };
 
-export const usePost = (post: Ref<Post> | Post) => {
+export const usePost = (post: Ref<Post | undefined> | Post) => {
   const mediaStore = useMediaStore();
 
   const media = computed(() => {

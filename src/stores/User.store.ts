@@ -34,8 +34,6 @@ export const useUserStore = defineStore("UserStore", {
         return supabase.auth.getSession().then(({ data }) => {
           if (!data || !data.session) return (this._session = undefined);
           this._session = data.session;
-        }).then(async () => {
-          if (this.user) this._profile = await api("user_profile");
         });
       });
     },
@@ -45,7 +43,6 @@ export const useUserStore = defineStore("UserStore", {
         "signIn",
         async () => {
           await api("vue-signin", { body: JSON.stringify({ email }) });
-          if (this.user) this._profile = await api("user_profile");
         },
       );
     },

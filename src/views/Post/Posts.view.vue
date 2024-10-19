@@ -1,9 +1,9 @@
 <template>
-    <WaterfallLayout>
+    <WaterfallLayout style="height: calc(100vh - 100px)" class="overflow-y-auto">
         <PageBanner />
         <RouterView>
             <template v-slot="{ Component }">
-                <div class="w-auto flex h-full">
+                <div class="w-auto flex h-full ">
                     <SpinnerLoader :loading="store.isActionActive('loading')"
                         :message="store.activeActions.join('<br>')" size="lg" class="m-auto">
                         <BaseGrid :items="store.posts" v-if="!Component" class="p-2">

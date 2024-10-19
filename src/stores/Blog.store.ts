@@ -27,6 +27,9 @@ export const useBlogStore = defineStore("BlogStore", {
             _posts?.sort((a, b) =>
                 Date.parse(a.publish!) - Date.parse(b.publish!)
             )[0] ?? undefined,
+        active: ({ _post }) => {
+            return _post;
+        },
         ...blogStoreActions.getters,
     },
     actions: {
@@ -34,8 +37,14 @@ export const useBlogStore = defineStore("BlogStore", {
             blogStoreActions.runAction(
                 this,
                 "loadingPost",
-                async () =>
-                    PostService.readPost(postId).then((e) => this._post = e),
+                async () => {
+                    const { data, error } = await supabase.functions.invoke(
+                        "blog",
+                        { body: { postId } },
+                    );
+                    if (error) throw error;
+                    this._post = data;
+                },
             );
         },
         loadPosts() {

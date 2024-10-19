@@ -1,7 +1,7 @@
 export interface IconProps {
   name: string;
   style?: "outlined";
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 export const mediaIconMapping = {

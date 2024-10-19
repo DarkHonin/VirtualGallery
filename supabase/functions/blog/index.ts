@@ -56,16 +56,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY") ?? "",
     );
 
-    const { lastPublish } = await req.json();
-
-    const { data, error } = await client.from("Posts").select("*").lte(
-      "publish",
-      lastPublish ?? new Date().toISOString(),
-    ).limit(10).order("publish");
-
-    if (error) {
-      throw error;
-    }
+    const { lastPublish, postId } = await req.json();
 
     marked.use({
       extensions: [
@@ -73,17 +64,54 @@ Deno.serve(async (req) => {
       ],
     });
 
-    data.forEach((post) => {
-      post.content = marked.parse(post.content);
-    });
+    if (postId) {
+      const { data, error } = await client.from("Posts").select("*").eq(
+        "id",
+        postId,
+      ).lte(
+        "publish",
+        lastPublish ?? new Date().toISOString(),
+      ).single();
 
-    return new Response(JSON.stringify(data), {
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-      status: 200,
-    });
+      if (error) {
+        throw error;
+      }
+
+      return new Response(
+        JSON.stringify({
+          ...data,
+          content: marked.parse(data.content),
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+          },
+          status: 200,
+        },
+      );
+    } else {
+      const { data, error } = await client.from("Posts").select("*").lte(
+        "publish",
+        lastPublish ?? new Date().toISOString(),
+      ).limit(10).order("publish");
+
+      if (error) {
+        throw error;
+      }
+
+      data.forEach((post) => {
+        post.content = marked.parse(post.content);
+      });
+
+      return new Response(JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+        status: 200,
+      });
+    }
   } catch (err) {
     console.error(err);
     return new Response(String(err?.message ?? err), {
