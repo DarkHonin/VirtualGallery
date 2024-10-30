@@ -26,5 +26,6 @@ defineExpose({
     align-items: center;
     overflow-y: auto;
     overflow-x: hidden;
+    position: relative;
 }
 </style>

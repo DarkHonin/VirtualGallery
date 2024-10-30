@@ -46,7 +46,34 @@ export const usePost = (post: Ref<Post | undefined> | Post) => {
     }) ?? [];
   });
 
+  const coverImage = computed(() => {
+    if (!unref(post) || !unref(post)!.media) return undefined;
+    if (!unref(post)!.cover_image) return media.value[0];
+    const cover_image_name = unref(post)!.media!.find((name) =>
+      name == unref(post)!.cover_image!
+    )!;
+    return {
+      url: mediaStore.publicUrl(cover_image_name),
+      cover_image_name,
+    };
+  });
+
+  const lastUpdate = computed(() =>
+    (!unref(post)?.last_updated)
+      ? undefined
+      : new Date(Date.parse(unref(post)!.last_updated!)).toLocaleString()
+  );
+  const publicationDate = computed(() =>
+    (!unref(post)?.publish)
+      ? undefined
+      : new Date(Date.parse(unref(post)!.publish!)).toLocaleString()
+  );
+
   return {
+    coverImage,
     media,
+    post,
+    lastUpdate,
+    publicationDate,
   };
 };

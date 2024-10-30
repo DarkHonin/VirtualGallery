@@ -94,14 +94,16 @@ Deno.serve(async (req) => {
       const { data, error } = await client.from("Posts").select("*").lte(
         "publish",
         lastPublish ?? new Date().toISOString(),
-      ).limit(10).order("publish");
+      ).limit(10).order("last_updated");
 
       if (error) {
         throw error;
       }
 
       data.forEach((post) => {
-        post.content = marked.parse(post.content);
+        if (post.content) {
+          post.content = marked.parse(post.content);
+        }
       });
 
       return new Response(JSON.stringify(data), {

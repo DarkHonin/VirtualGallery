@@ -12,6 +12,7 @@ import BaseIcon from './components/icon/Base.icon.vue';
 import BrandGraphic from './components/graphics/Brand.graphic.vue';
 import type { MobileOtpType, EmailOtpType } from '@supabase/supabase-js';
 import { posts, profile } from './router/routes';
+import PageBanner from './components/core/PageBanner.vue';
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -49,5 +50,9 @@ onErrorCaptured((err) => {
 
 <template>
   <div v-if="error">{{ JSON.stringify(error) }}</div>
-  <RouterView v-else />
+  <template v-else>
+    <PageBanner />
+    <RouterView />
+
+  </template>
 </template>

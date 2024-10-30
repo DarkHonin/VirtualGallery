@@ -27,9 +27,6 @@ const router = createRouter({
     {
       path: "/auth",
       ...routeNames.auth(),
-      meta: {
-        requiresAuth: true,
-      },
       component: () => import("../views/Auth/Login.view.vue"),
     },
 
@@ -42,7 +39,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/",
+      path: "/:pathMatch(.*)*",
       ...routeNames.NotFound(),
       component: NotFoundView,
     },

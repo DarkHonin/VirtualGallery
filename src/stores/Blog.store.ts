@@ -25,16 +25,20 @@ export const useBlogStore = defineStore("BlogStore", {
     getters: {
         latest: ({ _posts }) =>
             _posts?.sort((a, b) =>
-                Date.parse(a.publish!) - Date.parse(b.publish!)
+                Date.parse(b.last_updated!) - Date.parse(a.last_updated!)
             )[0] ?? undefined,
         active: ({ _post }) => {
             return _post;
         },
+        posts: ({ _posts }) =>
+            _posts?.sort((a, b) =>
+                Date.parse(b.publish!) - Date.parse(a.publish!)
+            ) ?? [],
         ...blogStoreActions.getters,
     },
     actions: {
         loadPost(postId: number) {
-            blogStoreActions.runAction(
+            return blogStoreActions.runAction(
                 this,
                 "loadingPost",
                 async () => {
@@ -57,7 +61,7 @@ export const useBlogStore = defineStore("BlogStore", {
                         : undefined;
                     const { data, error } = await supabase.functions.invoke(
                         "blog",
-                        { body: { lastPublish } },
+                        { body: { lastPublish: lastPublish?.publish } },
                     );
                     if (error) throw error;
                     if (!this._posts) this._posts = [];

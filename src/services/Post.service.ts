@@ -21,7 +21,7 @@ export default {
     },
     readPosts: async (): Promise<PostPreview[]> => {
         const { data, error } = await PostTable().select(
-            "id,title, created_at, media",
+            "id,title, created_at, media, cover_image",
         );
 
         if (error) throw error;

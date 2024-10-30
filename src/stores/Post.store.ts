@@ -49,8 +49,6 @@ export const usePostStore = defineStore("ArtworkStore", {
   actions: {
     preflight(uid?: string) {
       return artworkStoreStateActions.runAction(this, "loading", async () => {
-        await new Promise((y) => setTimeout(y, 1000));
-
         return this._posts = await PostService.readPosts();
       });
     },
@@ -71,11 +69,12 @@ export const usePostStore = defineStore("ArtworkStore", {
 
             if (!this._posts) this._posts = [];
 
-            const found = this._posts?.find((e, i, arr) => {
+            const found = this._posts?.findIndex((e, i, arr) => {
               if (e.id == id) return Boolean(this._posts![i] = e);
             });
 
-            if (!found) this._posts?.push(<Post> data);
+            if (!(found >= 0)) this._posts?.push(<Post> data);
+            else this._posts[found] = <Post> data;
 
             this._activePost = <Post> data;
             this._cachedPost = JSON.parse(JSON.stringify(data));
@@ -97,12 +96,12 @@ export const usePostStore = defineStore("ArtworkStore", {
         const mediaStore = useMediaStore();
 
         if (this.post!.id) {
+          this.post.last_updated = new Date().toISOString();
           const newMedia = await mediaStore.publishNewMedia(this.post.id);
           if (!this.post.media) this.post.media = [];
           this.post.media = this.post.media.concat(newMedia);
 
           const removed = await mediaStore.deleteRemovedMedia();
-          console.log(removed);
           this.post.media = this.post.media.filter((e) => !removed.includes(e));
 
           const update = await PostTable().update(this.post!).eq(
@@ -119,6 +118,8 @@ export const usePostStore = defineStore("ArtworkStore", {
           const newMedia = await mediaStore.publishNewMedia(NaN);
           if (!this.post.media) this.post.media = [];
           this.post.media = this.post.media.concat(newMedia);
+          this.post.author = useUserStore().user!.id;
+          this.post.last_updated = new Date().toISOString();
           const update = await PostTable().insert(this.post!).select()
             .single();
           if (update.error || !update.data) {

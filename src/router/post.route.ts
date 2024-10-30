@@ -16,19 +16,15 @@ export default {
         {
             path: "i/:postId",
             ...routeNames.post(),
-            component: () => import("../views/Post/Post.edit.vue"),
-            beforeEnter(from, to, next) {
-                const artworkStore = usePostStore();
-                artworkStore.clearPost();
-                const param = <string> (to.params.postId ?? from.params.postId);
-                if (param !== "new") {
-                    const id = parseInt(
-                        <string> (to.params.postId ?? from.params.postId),
-                    );
-                    artworkStore.loadPost(id);
-                }
-                next();
+            component: () => import("../views/Post/Post.view.vue"),
+        },
+        {
+            path: "e/:postId",
+            ...routeNames.postEdit(),
+            meta: {
+                requiresAuth: true,
             },
+            component: () => import("../views/Post/Post.edit.vue"),
         },
     ],
 } as RouteRecordRaw;

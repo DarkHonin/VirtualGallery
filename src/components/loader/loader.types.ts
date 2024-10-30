@@ -1,5 +1,5 @@
 export interface BaseLoaderProps {
-  loading?: boolean
-  size?: 'sm' | 'md' | 'lg'
-  message?: string
+  loading?: boolean;
+  size?: "xs" | "sm" | "md" | "lg";
+  message?: string;
 }

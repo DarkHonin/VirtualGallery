@@ -1,7 +1,7 @@
 <template>
     <div class="loader-spinner  text-label-primary w-min h-min animate-pulse inline-flex overflow-visible"
         v-bind="$attrs" v-if="loading">
-        <BrandGraphic width="100" height="100" name="progress_activity" style="min-width: 100px" />
+        <BrandGraphic v-bind="graphicSize" name="progress_activity" />
         <label class="text-center m-auto">
             <slot name="message" :bind="{ message }">
                 {{ message }}
@@ -21,13 +21,14 @@ const props = withDefaults(defineProps<BaseLoaderProps>(), {
     size: () => "sm"
 })
 
-const size = computed(() => {
+const graphicSize = computed(() => {
     const sizes = {
-        sm: "scale-100",
-        md: "scale-125",
-        lg: "scale-150"
+        xs: "50",
+        sm: "75",
+        md: "100",
+        lg: "150"
     }
-    return sizes[props.size]
+    return { width: sizes[props.size], height: sizes[props.size] }
 })
 
 </script>

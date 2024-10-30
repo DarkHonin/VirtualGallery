@@ -74,33 +74,50 @@ export type Database = {
       }
       Posts: {
         Row: {
+          author: string
           content: string | null
+          cover_image: string | null
           created_at: string
           id: number
+          last_updated: string | null
           media: string[] | null
           publish: string | null
           tags: string[] | null
           title: string | null
         }
         Insert: {
+          author: string
           content?: string | null
+          cover_image?: string | null
           created_at?: string
           id?: number
+          last_updated?: string | null
           media?: string[] | null
           publish?: string | null
           tags?: string[] | null
           title?: string | null
         }
         Update: {
+          author?: string
           content?: string | null
+          cover_image?: string | null
           created_at?: string
           id?: number
+          last_updated?: string | null
           media?: string[] | null
           publish?: string | null
           tags?: string[] | null
           title?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "Posts_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       Profiles: {
         Row: {

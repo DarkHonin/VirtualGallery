@@ -20,4 +20,9 @@ export const post = (postId?: Post["id"] | "new") => ({
   ...(postId ? { params: { postId } } : {}),
 });
 
+export const postEdit = (postId?: Post["id"] | "new") => ({
+  name: "artwork_edit",
+  ...(postId ? { params: { postId } } : {}),
+});
+
 export const profile = () => ({ name: "profile" });

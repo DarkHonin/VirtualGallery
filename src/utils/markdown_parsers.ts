@@ -19,6 +19,6 @@ export const imageParser = () => ({
     ) {
         const { media } = useActivePost();
 
-        return `<img src="${media.value[href]}" alt="${text}" />`;
+        return `<img src="${media.value?.[href]}" alt="${text}" />`;
     },
 });
