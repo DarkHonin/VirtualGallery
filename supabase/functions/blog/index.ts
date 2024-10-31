@@ -1,17 +1,13 @@
 // Follow this setup guide to integrate the Deno language server with your editor:
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
-import {
-  marked,
-  Renderer,
-} from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
-import { Database } from "../database_types.ts";
 
-import { corsHeaders } from "../headers.ts";
-import { Client } from "../user_profile/common/common.ts";
+import { corsHeaders } from "../_shared/corsHeaders.ts";
+import { type Client, dbClient } from "../_shared/db.ts";
+import { parseFilter } from "../_shared/post.ts";
 
 console.log("Hello from Functions!");
 
@@ -50,13 +46,11 @@ Deno.serve(async (req) => {
       headers: corsHeaders,
     });
   }
-  try {
-    const client = createClient<Database>(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    );
 
-    const { lastPublish, postId } = await req.json();
+  try {
+    const client = dbClient(req);
+
+    const { postId, lastPublish } = await parseFilter(req);
 
     marked.use({
       extensions: [
@@ -64,56 +58,66 @@ Deno.serve(async (req) => {
       ],
     });
 
-    if (postId) {
-      const { data, error } = await client.from("Posts").select("*").eq(
-        "id",
-        postId,
-      ).lte(
-        "publish",
-        lastPublish ?? new Date().toISOString(),
-      ).single();
+    const path = req.url.split("/").pop() ?? "post";
 
-      if (error) {
-        throw error;
-      }
-
-      return new Response(
-        JSON.stringify({
-          ...data,
-          content: marked.parse(data.content),
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders,
-          },
-          status: 200,
-        },
-      );
-    } else {
-      const { data, error } = await client.from("Posts").select("*").lte(
-        "publish",
-        lastPublish ?? new Date().toISOString(),
-      ).limit(10).order("last_updated");
-
-      if (error) {
-        throw error;
-      }
-
-      data.forEach((post) => {
-        if (post.content) {
-          post.content = marked.parse(post.content);
+    const routes = {
+      post: async () => {
+        let query = client.from("Posts").select("*");
+        if (postId) {
+          query = query.eq(
+            "id",
+            postId,
+          );
         }
-      });
 
-      return new Response(JSON.stringify(data), {
+        const { data, error } = await query.lte(
+          "publish",
+          new Date().toISOString(),
+        ).single();
+
+        if (error) throw error;
+        if (!data) throw 404;
+
+        return {
+          ...data,
+          content: data?.content ? marked.parse(data?.content) : "",
+        };
+      },
+      posts: async () => {
+        const { data, error } = await client.from("Posts").select("*").lte(
+          "publish",
+          lastPublish ?? new Date().toISOString(),
+        ).limit(10).order("last_updated");
+
+        if (error) {
+          throw error;
+        }
+
+        data.forEach((post) => {
+          if (post.content) {
+            post.content = marked.parse(post.content);
+          }
+        });
+        return data;
+      },
+    };
+
+    if (!Object.hasOwn(routes, path)) {
+      return new Response("Not Found", { status: 404 });
+    }
+
+    return new Response(
+      JSON.stringify(
+        await routes[path](),
+      ),
+      {
         headers: {
           "Content-Type": "application/json",
           ...corsHeaders,
         },
         status: 200,
-      });
-    }
+      },
+    );
   } catch (err) {
     console.error(err);
     return new Response(String(err?.message ?? err), {

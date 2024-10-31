@@ -75,7 +75,7 @@ export type Database = {
       Posts: {
         Row: {
           author: string
-          content: string | null
+          content: Json | null
           cover_image: string | null
           created_at: string
           id: number
@@ -87,7 +87,7 @@ export type Database = {
         }
         Insert: {
           author: string
-          content?: string | null
+          content?: Json | null
           cover_image?: string | null
           created_at?: string
           id?: number
@@ -99,7 +99,7 @@ export type Database = {
         }
         Update: {
           author?: string
-          content?: string | null
+          content?: Json | null
           cover_image?: string | null
           created_at?: string
           id?: number

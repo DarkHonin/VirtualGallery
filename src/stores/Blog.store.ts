@@ -13,41 +13,46 @@ const blogStoreActions = defineStateActions(BlogStoreActions);
 
 interface BlogStoreState extends StoreState<typeof BlogStoreActions> {
     _post?: Post;
-    _posts?: Post[];
+    _posts: {
+        [id: number]: Post;
+    };
 }
 
 export const useBlogStore = defineStore("BlogStore", {
     state: (): BlogStoreState => ({
         _post: undefined,
-        _posts: undefined,
+        _posts: {},
         ...blogStoreActions.state,
     }),
     getters: {
         latest: ({ _posts }) =>
-            _posts?.sort((a, b) =>
-                Date.parse(b.last_updated!) - Date.parse(a.last_updated!)
-            )[0] ?? undefined,
+            Object.values(_posts).sort((a, b) =>
+                Date.parse(b.publish!) - Date.parse(a.publish!)
+            )[0] ?? [],
         active: ({ _post }) => {
             return _post;
         },
         posts: ({ _posts }) =>
-            _posts?.sort((a, b) =>
+            Object.values(_posts).sort((a, b) =>
                 Date.parse(b.publish!) - Date.parse(a.publish!)
             ) ?? [],
         ...blogStoreActions.getters,
     },
     actions: {
-        loadPost(postId: number) {
+        loadPost(postId?: number) {
             return blogStoreActions.runAction(
                 this,
                 "loadingPost",
                 async () => {
-                    const { data, error } = await supabase.functions.invoke(
-                        "blog",
+                    const { data, error } = await supabase.functions.invoke<
+                        Post
+                    >(
+                        "blog/post",
                         { body: { postId } },
                     );
-                    if (error) throw error;
+                    if (error || !data) throw error;
                     this._post = data;
+                    this._posts[data.id] = this._post;
                 },
             );
         },
@@ -56,16 +61,16 @@ export const useBlogStore = defineStore("BlogStore", {
                 this,
                 "loadingPost",
                 async () => {
-                    const lastPublish = this._posts?.length
-                        ? this._posts[this._posts.length - 1]
-                        : undefined;
-                    const { data, error } = await supabase.functions.invoke(
-                        "blog",
-                        { body: { lastPublish: lastPublish?.publish } },
+                    const { data, error } = await supabase.functions.invoke<
+                        Post[]
+                    >(
+                        "blog/posts",
+                        {
+                            body: { lastPublish: this.latest.publish },
+                        },
                     );
-                    if (error) throw error;
-                    if (!this._posts) this._posts = [];
-                    this._posts.push(...data);
+                    if (error || !data) throw error;
+                    data.forEach((i) => this._posts[i.id] = i);
                 },
             );
         },

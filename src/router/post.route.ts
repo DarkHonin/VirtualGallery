@@ -7,11 +7,6 @@ export default {
     path: "/posts",
     ...routeNames.posts(),
     component: () => import("../views/Post/Posts.view.vue"),
-    async beforeEnter(from, to, next) {
-        const artworkStore = usePostStore();
-        artworkStore.preflight();
-        next();
-    },
     children: [
         {
             path: "i/:postId",

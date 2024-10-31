@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useActivePost, type Post } from "@/db/post.model"
 import { usePostStore } from "@/stores/Post.store"
 import { useRoute, useRouter } from 'vue-router'
@@ -56,6 +56,10 @@ const { activePost } = useActivePost()
 const imageUpload = (e: File) => {
     postStore.addPostMedia(e)
 }
+
+onMounted(() => {
+    postStore.loadPost(parseInt(<string>route.params.postId))
+})
 
 const postContent = ref<typeof PostEditFormItem>()
 

@@ -10,6 +10,11 @@
         <div class=" flex flex-col min-w-64 p-2 z-10 meta">
             <h2>{{ post?.title }}</h2>
             <h3>{{ publicationDate }}</h3>
+            <div class="mt-auto" v-if="userStore.user && userStore.user.id == post?.author">
+                <RouterLink :to="postEdit(post.id)">
+                    <BaseIcon name="edit" />
+                </RouterLink>
+            </div>
         </div>
         <div class="overflow-hidden flex-1 w-full z-10 content">
             <div v-html="post?.content" class="markup">
@@ -21,7 +26,11 @@
 
 <script lang="ts" setup>
 import { usePost as usePost, type Post } from '@/db/post.model';
+import { postEdit } from '@/router/routes';
+import { useUserStore } from '@/stores/User.store';
 import { computed, onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import BaseIcon from '../icon/Base.icon.vue';
 
 const props = defineProps<{
     item?: Post
@@ -35,6 +44,8 @@ const backdrop = ref<HTMLElement>()
 onMounted(() => {
     setTimeout(() => backdrop.value?.classList.add("opacity-100"), 1000)
 })
+
+const userStore = useUserStore()
 
 </script>
 

@@ -1,52 +1,21 @@
 <script setup lang="ts">
-import PageBanner from '@/components/core/PageBanner.vue';
 import BrandGraphic from '@/components/graphics/Brand.graphic.vue';
 import BaseIcon from '@/components/icon/Base.icon.vue';
 import MediaIcon from '@/components/icon/Media.icon.vue';
 import WaterfallLayout from '@/components/layout/Waterfall.layout.vue';
 import { usePost } from '@/db/post.model';
 import { useBlogStore } from '@/stores/Blog.store';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const blogStore = useBlogStore()
 
-var lastScroll = 0
-const scrolls = ['', 'latest-post']
-var currentScroll = 0
-
 const layout = ref<HTMLElement>()
 
-const handleScroll = () => {
-    const scrollD = (layout.value?.scrollTop ?? 0) - lastScroll
-    if (scrollD < 0 && currentScroll > 0) {
-        if (scrolls[currentScroll]) {
-            const { top } = document.querySelector(`#${scrolls[currentScroll]}`)!.getBoundingClientRect()
-            if (top < window.outerHeight / 4)
-                return
 
-        }
-        currentScroll -= 1
-        if (!scrolls[currentScroll]) {
-            layout.value?.scrollTo({ top: 0 })
-            window.location.hash = ""
-        }
-        else
-            window.location.hash = `${scrolls[currentScroll]}`
-    } else if (scrollD > 0 && currentScroll < scrolls.length - 1) {
-        currentScroll += 1
-        window.location.hash = `${scrolls[currentScroll]}`
-    }
-
-
-    lastScroll = (layout.value?.scrollTop ?? 0)
-}
 
 onMounted(() => {
-    layout.value?.addEventListener("scroll", handleScroll)
-})
+    blogStore.loadPost()
 
-onBeforeUnmount(() => {
-    layout.value?.removeEventListener("scroll", handleScroll)
 })
 
 const { media, coverImage, lastUpdate, publicationDate, post } = usePost(computed(() => blogStore.latest))

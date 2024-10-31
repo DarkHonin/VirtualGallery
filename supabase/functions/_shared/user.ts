@@ -1,5 +1,5 @@
-import { Database } from "../../database_types.ts";
-import { Client } from "./common.ts";
+import { Database } from "../database_types.ts";
+import { Client } from "./db.ts";
 import {
     getUserFacingOAuthTokenServices,
     UserFacingOAuthToken,

@@ -2,9 +2,9 @@
     <BaseInput ref="root" v-bind="props" type="textarea" @mouseleave="widgetOffset = undefined"
         @update:model-value="emit('update:modelValue', $event as string)" class="text-area-input w-full">
         <template #control="{ handleUpdate }">
-            <div class="flex justify-stretch items-stretch">
+            <div class="flex justify-center items-stretch">
 
-                <div class="grow-wrap flex-1" :replicated-value="modelValue">
+                <div class="grow-wrap flex-1" style="max-width: 768px;" :replicated-value="modelValue">
                     <textarea class="bg-background2" ref="TextArea" :placeholder="placeholder"
                         @input="handleUpdate($event)">{{ modelValue }}</textarea>
                 </div>

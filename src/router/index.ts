@@ -18,10 +18,6 @@ const router = createRouter({
     {
       path: "/",
       ...routeNames.home(),
-      beforeEnter(to, from, next) {
-        useBlogStore().loadPosts();
-        next();
-      },
       component: LandingView,
     },
     {

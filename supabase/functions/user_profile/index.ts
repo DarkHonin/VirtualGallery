@@ -6,9 +6,10 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { Database } from "../database_types.ts";
-import { corsHeaders } from "../headers.ts";
-import { getUser } from "./common/user.ts";
+import { corsHeaders } from "../_shared/corsHeaders.ts";
+import { getUser } from "../_shared/user.ts";
 import { setup_user_profile } from "./table_setup.ts";
+import { dbClient } from "../_shared/db.ts";
 
 console.log("Hello from Functions!");
 
@@ -19,15 +20,7 @@ Deno.serve(async (req) => {
     });
   }
 
-  const client = createClient<Database>(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    {
-      global: {
-        headers: { Authorization: req.headers.get("Authorization")! },
-      },
-    },
-  );
+  const client = dbClient(req);
 
   try {
     const profile = await setup_user_profile(client);

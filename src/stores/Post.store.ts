@@ -27,31 +27,23 @@ export const PostStoreActions = {
 const artworkStoreStateActions = defineStateActions(PostStoreActions);
 
 interface PostStore extends StoreState<typeof PostStoreActions> {
-  _posts?: PostPreview[];
   _activePost?: Post;
   _cachedPost?: Post;
   _markup?: string;
 }
 
-export const usePostStore = defineStore("ArtworkStore", {
+export const usePostStore = defineStore("Post Edit Store", {
   state: (): PostStore => ({
-    _posts: undefined,
     _activePost: undefined,
     _cachedPost: undefined,
     _markup: undefined,
     ...artworkStoreStateActions.state,
   }),
   getters: {
-    posts: ({ _posts: _artworks }) => _artworks ?? [],
     post: ({ _activePost }) => _activePost ?? <Post> {},
     ...artworkStoreStateActions.getters,
   },
   actions: {
-    preflight(uid?: string) {
-      return artworkStoreStateActions.runAction(this, "loading", async () => {
-        return this._posts = await PostService.readPosts();
-      });
-    },
     clearPost() {
       delete this._markup;
       delete this._activePost;
@@ -66,15 +58,6 @@ export const usePostStore = defineStore("ArtworkStore", {
             const { data, error } = await PostTable().select().eq("id", id)
               .single();
             if (error || !data) throw error || "Could not find artwork";
-
-            if (!this._posts) this._posts = [];
-
-            const found = this._posts?.findIndex((e, i, arr) => {
-              if (e.id == id) return Boolean(this._posts![i] = e);
-            });
-
-            if (!(found >= 0)) this._posts?.push(<Post> data);
-            else this._posts[found] = <Post> data;
 
             this._activePost = <Post> data;
             this._cachedPost = JSON.parse(JSON.stringify(data));
@@ -160,7 +143,6 @@ export const usePostStore = defineStore("ArtworkStore", {
 
         await PostEditService.deletePost(this._activePost.id);
 
-        this._posts = this._posts?.filter((e) => e.id != this._activePost!.id);
         this.clearPost();
       });
     },

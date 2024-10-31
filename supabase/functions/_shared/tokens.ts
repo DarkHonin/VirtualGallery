@@ -1,6 +1,5 @@
-import { Database } from "../../database_types.ts";
-import { Client } from "./common.ts";
-import { getProfile, getUser } from "./user.ts";
+import { Database } from "../database_types.ts";
+import { Client } from "./db.ts";
 
 export type OAuthToken = Database["public"]["Tables"]["OAuthTokens"]["Row"];
 export type UserFacingOAuthToken = Pick<
