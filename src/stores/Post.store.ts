@@ -40,7 +40,7 @@ export const usePostStore = defineStore("Post Edit Store", {
     ...artworkStoreStateActions.state,
   }),
   getters: {
-    post: ({ _activePost }) => _activePost ?? <Post> {},
+    post: ({ _activePost }) => (_activePost as any ?? {}) as Post,
     ...artworkStoreStateActions.getters,
   },
   actions: {
@@ -59,7 +59,8 @@ export const usePostStore = defineStore("Post Edit Store", {
               .single();
             if (error || !data) throw error || "Could not find artwork";
 
-            this._activePost = <Post> data;
+            // @ts-ignore
+            this._activePost = data;
             this._cachedPost = JSON.parse(JSON.stringify(data));
 
             await useMediaStore().fetchMediaForPost(this._activePost.id);
