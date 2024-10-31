@@ -25,13 +25,15 @@ const { media, coverImage, lastUpdate, publicationDate, post } = usePost(compute
 </script>
 
 <template>
-    <div class="overflow-y-auto scroll-smooth z-10" style="height: calc(100vh - 100px)" ref="layout">
+    <div class="overflow-y-auto scroll-smooth z-10" style="height: calc(100vh - 100px); " ref="layout">
         <div :style="{ 'background-image': `URL('${coverImage?.url}')` }" style="z-index: -1;"
             class="bg-cover bg-center absolute w-screen h-screen top-0 opacity-40" />
-        <WaterfallLayout class="landing-view items-center relative ">
-            <div class="h-full flex flex-1 flex-col bg-background2 z-10 justify-center items-center px-4">
-                <div style="max-width: 600px; display: flex; flex-direction: column; align-items: center;">
-                    <BrandGraphic width="300" height="300" class="m-auto" style="max-width: 300px" />
+        <WaterfallLayout class="landing-view items-center relative m-auto" style="width: 768px;">
+            <div class="bg-background2" style="  width: 768px;">
+                <BrandGraphic width="300" height="300" class="m-auto" style="width: 300px" />
+            </div>
+            <div class="h-full flex flex-1 flex-col bg-background2 z-10 justify-center items-center px-4 w-full">
+                <div style="display: flex; flex-direction: column; align-items: center;">
                     <h2 style="text-decoration: underline;">
                         Welcome to this place
                     </h2>
@@ -64,7 +66,7 @@ const { media, coverImage, lastUpdate, publicationDate, post } = usePost(compute
 
             </div>
         </WaterfallLayout>
-        <WaterfallLayout id="latest-post" style="backdrop-filter: blur(10px);">
+        <WaterfallLayout id="latest-post" style="backdrop-filter: blur(10px);" v-if="blogStore.latest">
             <div class="bg-background w-full p-2">
                 <div style="max-width: 300px;" class="w-full m-auto">
                     <h2 class="text-center">

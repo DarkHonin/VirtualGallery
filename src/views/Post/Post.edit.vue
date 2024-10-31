@@ -40,7 +40,7 @@ import BaseButton from '@/components/button/Base.button.vue'
 import SpinnerLoader from '@/components/loader/Spinner.loader.vue'
 import BaseIcon from '@/components/icon/Base.icon.vue'
 
-import { post, posts } from '@/router/routes'
+import { post, postEdit, posts } from '@/router/routes'
 import PostEditFormItem from '@/components/post/PostEdit.formItem.vue'
 import { useUserStore } from '@/stores/User.store'
 import PublishButton from '@/components/button/Publish.button.vue'
@@ -67,7 +67,7 @@ const save = () => {
     postStore.savePost()
         .then((a: Post) => {
             if (route.params['postId'] == 'new')
-                router.push(post(a.id))
+                router.push(postEdit(a.id))
         })
 }
 

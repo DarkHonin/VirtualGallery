@@ -73,7 +73,6 @@ const addMedia = () => {
     input.addEventListener('change', () => {
         if (!input.files?.length) return
         const name = mediaStore.registerMedia(props.post.id ?? NaN, input.files[0])
-        contentInput.value!.injectImage(name)
     })
     input.setAttribute('type', "file")
     input.setAttribute("accept", 'image/*')
