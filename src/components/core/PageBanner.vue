@@ -1,7 +1,7 @@
 <template>
-    <div class="page-banner">
-        <h1 class="banner-container">
-            <BrandGraphic height="60" width="60" v-if="false" />
+    <div class="page-banner border-b-background border-b-2">
+        <h1 class="banner-container flex justify-center items-center gap-2">
+            <BrandGraphic height="60" width="60" />
             <RouterLink class="banner-title" :to="home()">
                 HoninWorx
             </RouterLink>

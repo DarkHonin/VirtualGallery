@@ -27,5 +27,6 @@ defineExpose({
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
+    max-width: 100vw;
 }
 </style>
