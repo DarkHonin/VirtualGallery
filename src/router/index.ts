@@ -9,29 +9,30 @@ import * as routeNames from "./routes";
 import LandingView from "@/views/Landing.view.vue";
 import postRoute from "./post.route";
 import profileRoutes from "./profile.routes";
-import { useBlogStore } from "@/stores/Blog.store";
+
 import NotFoundView from "@/views/Common/NotFound.view.vue";
+import AuthRoutes from "./Auth.routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "",
       ...routeNames.home(),
       component: LandingView,
     },
     {
-      path: "/auth",
-      ...routeNames.auth(),
-      component: () => import("../views/Auth/Login.view.vue"),
+      path: "/about",
+      ...routeNames.about(),
+      component: LandingView,
     },
-
     {
-      path: "/",
+      path: "",
       name: "root",
       children: [
         profileRoutes,
-        postRoute,
+        ...postRoute,
+        AuthRoutes,
       ],
     },
     {
@@ -45,11 +46,14 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     const userStore = useUserStore();
-    await userStore.preflight();
-    if (userStore.user) {
-      return next();
+    try {
+      await userStore.captureSession();
+      if (userStore.isSignedIn) {
+        return next();
+      }
+    } catch (e) {
+      return next(routeNames.NotFound());
     }
-    return next(routeNames.NotFound());
   } else {
     next();
   }

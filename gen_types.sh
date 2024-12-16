@@ -1,7 +1,5 @@
 # !/bin/sh
 echo on
-supabaseTarget=supabase/functions/database_types.ts
-vueTarget=src/db/database.types.ts
+supabaseTarget=supabase/functions/_shared/database_types.ts
 
-supabase gen types --local --lang typescript > $supabaseTarget
-cat $supabaseTarget > $vueTarget
+supabase gen types --workdir src --local --lang typescript > $supabaseTarget

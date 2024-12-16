@@ -1,5 +1,5 @@
 <template>
-    <div class="loader-spinner  text-label-primary w-min h-min animate-pulse inline-flex overflow-visible"
+    <div class="loader-spinner  text-label-primary w-min h-min animate-pulse flex flex-col overflow-visible"
         v-bind="$attrs" v-if="loading">
         <BrandGraphic v-bind="graphicSize" name="progress_activity" />
         <label class="text-center m-auto">
@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<BaseLoaderProps>(), {
 
 const graphicSize = computed(() => {
     const sizes = {
+        ss: "25",
         xs: "50",
         sm: "75",
         md: "100",

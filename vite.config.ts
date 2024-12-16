@@ -11,6 +11,9 @@ export default defineConfig({
     "preserveSymlinks": true,
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "+": fileURLToPath(
+        new URL("./supabase/functions/_shared", import.meta.url),
+      ),
     },
   },
 });

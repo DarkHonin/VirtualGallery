@@ -1,5 +1,5 @@
 <template>
-    <component :is="to ? RouterLink : 'span'" v-bind="$props" class="nav-link">
+    <component :is="to ? RouterLink : 'span'" v-bind="$props" class="nav-link px-4">
         <slot />
     </component>
 </template>
@@ -12,8 +12,6 @@ defineProps<{
     to?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
 }>()
 
-
-
 </script>
 
 <style lang="scss">
@@ -23,10 +21,13 @@ defineProps<{
     font-size: 16px;
 
     transition: background-color .2s;
-    padding: 2px;
 
     &:hover {
-        background-color: var(--background);
+        background-color: var(--background-2);
+    }
+
+    &.router-link-exact-active {
+        background-color: var(--background-2);
     }
 }
 </style>

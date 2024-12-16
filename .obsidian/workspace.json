@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "c9353b0975fb21ee",
+    "type": "split",
+    "children": [
+      {
+        "id": "653bdbe1e73196b7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f23c421e316c0d23",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          },
+          {
+            "id": "ecaf7fd8a450b7a9",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "SeedPosts/ThisWebsite/Excalidraw/SystemicLayout.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "SystemicLayout.excalidraw"
+            }
+          },
+          {
+            "id": "4d963b659e644f08",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "SeedPosts/ThisWebsite/Excalidraw/Drawing 2024-12-08 19.17.50.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2024-12-08 19.17.50.excalidraw"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ec34cc5e6ef9c2d9",
+    "type": "split",
+    "children": [
+      {
+        "id": "b5b9e59b7aecd3c3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "312aab9492736460",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "820e015b242a2492",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "6a9e6a2701510a01",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "2347bfabde44cc62",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ddd1265d65d05de",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9a66aabecabb7d28",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "fb04a438c45c6bb8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "SeedPosts/ThisWebsite/Untitled Diagram.svg",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Untitled Diagram"
+            }
+          },
+          {
+            "id": "3965a1315a77dbd6",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "6f32dd835f63e1c2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "SeedPosts/ThisWebsite/Untitled Diagram.svg"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Untitled Diagram"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
+    }
+  },
+  "active": "f23c421e316c0d23",
+  "lastOpenFiles": [
+    "src/supabase/test/manifest.json",
+    "src/supabase/test/e8a4d54e-f47c-45d1-a516-881ab8791bd3",
+    "src/supabase/test/e10e3f89-322e-405c-aa2c-b1e824600a4b",
+    "src/supabase/test/a78d74a6-0afd-43a4-a4bf-a2564f93a1fa",
+    "src/supabase/test/THeseFish.jpg",
+    "src/supabase/test/Cookie01-1763520633.jpg",
+    "src/supabase/test/8cd1f0fb-a130-4e3d-9d30-899828ac61c9",
+    "src/supabase/test/6fc0f0a2-ef4e-4125-ac0a-99a5a65011cc",
+    "src/supabase/test/4a469aab-e224-42cb-904a-2507069ac100",
+    "src/supabase/test/2001-fenton-harcourt-03-497835060.jpg",
+    "src/supabase/test",
+    "vite.config.ts.timestamp-1733906762036-626ac6237ff84.mjs",
+    "SeedPosts/ThisWebsite/Excalidraw/SystemicLayout.excalidraw.md",
+    "SeedPosts/ThisWebsite/ThisWebsite.md",
+    "Excalidraw",
+    "SeedPosts/ThisWebsite/Excalidraw/Drawing 2024-12-08 19.17.50.excalidraw.md",
+    "SeedPosts/ThisWebsite/Excalidraw",
+    "SeedPosts/ThisWebsite/Untitled Diagram.svg",
+    "Untitled Diagram 1.svg",
+    "README.md",
+    "SeedPosts/Untitled.md"
+  ]
+}

@@ -1,5 +1,10 @@
 {
   "imports": {
-    "markdown": "https://deno.land/x/markdown@v2.0.0/mod.ts"
+    "@markdown": "npm:marked",
+    "@header": "./_shared/corsHeaders.ts",
+    "@db": "./_shared/db.ts",
+    "@types": "./_shared/database_types.ts",
+    "@post": "./_shared/post.ts",
+    "@user": "./_shared/user.ts"
   }
 }

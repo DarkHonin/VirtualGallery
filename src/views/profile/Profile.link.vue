@@ -29,11 +29,11 @@ const error = ref<string>()
 
 
 onMounted(() => {
-    api("tumblr_oauth", { code: queryObject.value.code }).then((success) => {
-        if (!success)
-            error.value = "Failed to link to tumblr"
-        router.replace(profile())
-    })
+    // api("tumblr_oauth", { code: queryObject.value.code }).then((success) => {
+    //     if (!success)
+    //         error.value = "Failed to link to tumblr"
+    //     router.replace(profile())
+    // })
 })
 
 </script>

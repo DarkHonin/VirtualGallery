@@ -1,11 +1,11 @@
-import { Database } from "../database_types.ts";
-import { Client } from "./db.ts";
+import type { Database } from "./database_types.ts";
+import type { Client } from "./db.ts";
 
 const { fromEntries: __, entries: _ } = Object;
 
 export type Post = Database["public"]["Tables"]["Posts"]["Row"];
 
-export const PostTable = (client: Client) => client.from("Posts");
+export const PostTable = (client: Client) : ReturnType<Client['from']> => client.from("Posts");
 
 export interface ResponseManifest {
     item_count: number;

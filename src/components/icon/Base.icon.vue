@@ -1,13 +1,13 @@
 <template>
     <slot>
-        <span :size="size" class="base-icon" :class="`material-symbols-${style}`" v-bind="$attrs">{{ name }}</span>
+        <span :size="size" class="base-icon" :class="`material-symbols-${iconStyle}`" v-bind="$attrs">{{ name }}</span>
     </slot>
 </template>
 
 <script setup lang="ts">
 import { type IconProps } from './icon.type'
 const props = withDefaults(defineProps<IconProps>(), {
-    style: () => "outlined",
+    iconStyle: () => "outlined",
     size: () => 'md'
 })
 

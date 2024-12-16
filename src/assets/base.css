@@ -5,19 +5,24 @@
 :root {
   --background: theme('colors.background');
   --background-2: theme('colors.background2');
+  --background-3: theme('colors.background3');
 }
 
 html {
   scroll-behavior: smooth;
-  overflow-y: hidden;
 }
 
 h1 {
-  font-size: 48px;
+  font-size: 36px;
+  text-wrap: wrap;
 }
 
 h2 {
   font-size: 24px;
+}
+
+h3 {
+  font-size: 18px;
 }
 
 body {
@@ -25,32 +30,65 @@ body {
   color: white;
   background-color: theme('colors.background');
   scroll-behavior: smooth;
-  overflow-y: hidden;
+}
+
+body:has(.dialog) {
+  overflow: hidden;
+}
+
+i {
+  color: theme('colors.positive');
 }
 
 .drawer-element:has(.route-active) {
   /* background-color: theme('colors.primary-active'); */
 }
 
-.markup.edit {
-  width: 768px;
-  max-width: 768px;
-}
-
 .markup {
-  padding: 1em;
+  line-height: 1;
+  padding: 0em 1em;
+  padding-bottom: 1em;
+  max-width: 515px;
+  margin: auto;
 }
 
-.markup hr {
-  margin: 0.5em 0em;
-}
 .markup img {
-  margin: 1em 0em;
-  max-width: calc(100vw - 4em);
-  width: 100%;
-  display: block;
+  max-height: 400px;
+  margin: auto;
+}
+
+.markup ul {
+  margin-left: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.markup li {
+  list-style: circle;
 }
 
 .markup p {
-  margin: 2em;
+  padding: 0em 1em;
+  margin: auto;
+}
+
+.markup h1 {
+  margin-bottom: 0.5em;
+}
+
+.markup h2 {
+}
+
+hr {
+  width: 100%;
+  margin: 1em 0em;
+}
+
+.flair-container {
+  backdrop-filter: blur(2px);
+  transition: backdrop-filter 0.2s;
+}
+
+.flair-container:hover {
+  backdrop-filter: blur(0px);
 }

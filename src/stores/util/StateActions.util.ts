@@ -27,8 +27,11 @@ export const defineStateActions = <t extends Object>(actionKeys: t) => {
           .filter(([k, v]) => v)
           .map(([k, v]) => actionKeys[k as keyof t]),
       isActionActive:
-        ({ _stateActions }: StoreState<t>) => (actionKey: keyof t) =>
-          _stateActions[actionKey],
+        ({ _stateActions }: StoreState<t>) =>
+        (actionKey: keyof t | (keyof t)[]) =>
+          typeof actionKey == "string"
+            ? _stateActions[<keyof t> actionKey]
+            : [...<(keyof t)[]> actionKey].some((opt) => _stateActions[opt]),
       isActing: ({ _stateActions }: StoreState<t>) =>
         Object.values(_stateActions).some((e) => e),
     },
@@ -37,6 +40,11 @@ export const defineStateActions = <t extends Object>(actionKeys: t) => {
       action: keyof t,
       cb: { (): void | Promise<any> },
     ) {
+      if (_stateActions[action]) {
+        throw `Already preforming action '${<string> action}:${
+          _stateActions[action]
+        }'`;
+      }
       _stateActions[action] = true;
       try {
         return await cb();

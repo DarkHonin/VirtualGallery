@@ -1,51 +1,109 @@
 <template>
-    <div class="page-banner border-b-background border-b-2">
+    <div class="page-banner border-b-background border-b-2 sticky top-0">
         <h1 class="banner-container flex justify-center items-center gap-2">
             <BrandGraphic height="60" width="60" />
             <RouterLink class="banner-title" :to="home()">
                 HoninWorx
             </RouterLink>
         </h1>
-        <div class="nav-bar">
-
-
+        <div class="nav-bar hidden sm:flex justify-center">
             <NavLink :to="posts()">
-                Posts
+                Projects
             </NavLink>
 
-            <NavLink :to="home()">
+            <NavLink :to="about()">
                 About
             </NavLink>
 
-            <template v-if="isLocal || authStore.user">
+            <template v-if="isLocal || userStore.isSignedIn">
+                <template v-if="!userStore.user">
+                    <NavLink v-if="ENABLE_LOGIN" :to="login()">
+                        Login
+                    </NavLink>
+                    <NavLink v-if="ENABLE_REGISTER" :to="registerPage()">
+                        Register
+                    </NavLink>
+                </template>
 
-                <NavLink :to="auth($route.path)" v-if="!authStore.user">
+                <NavLink v-else @click="handleLogout" class="relative">
+                    <BaseLoader :loading="userStore.isActionActive('signOut')" size="xs">
+                        Logout
+                    </BaseLoader>
+                </NavLink>
+
+            </template>
+        </div>
+        <div class="flex flex-col nav-bar sm:hidden items-center expander relative cursor-pointer gap-2">
+            <label class="absolute flex items-center h-7 top-0 cursor-pointer select-none w-full">
+                <BaseIcon :name="expanderOpen ? 'close' : 'menu'" size="lg" />
+                <input @click="expanderOpen = !expanderOpen" :checked="expanderOpen" type="checkbox" hidden
+                    ref="expanderInput">
+            </label>
+            <NavLink class="w-full justify-center items-center text-center" :to="home()" v-if="isRoute(home())">
+                Home
+            </NavLink>
+            <NavLink class="w-full justify-center items-center text-center" :to="posts()">
+                Projects
+            </NavLink>
+
+            <NavLink class="w-full justify-center items-center text-center" :to="about()">
+                About
+            </NavLink>
+            <template v-if="!userStore.isSignedIn">
+                <NavLink v-if="ENABLE_LOGIN" class="w-full justify-center items-center text-center" :to="login()">
                     Login
                 </NavLink>
-                <NavLink v-else @click="authStore.logout()" class="relative">
-                    <BaseLoader :loading="authStore.isActing" />
 
-                    Logout
+                <NavLink v-if="ENABLE_REGISTER" class="w-full justify-center items-center text-center"
+                    :to="registerPage()">
+                    Register
                 </NavLink>
-
+            </template>
+            <template v-else>
+                <NavLink @click="handleLogout" class="w-full justify-center items-center text-center">
+                    <BaseLoader class="justify-center" :loading="userStore.isActing">
+                        Logout
+                    </BaseLoader>
+                </NavLink>
             </template>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { RouterLink } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, RouterLink, useRoute, useRouter } from 'vue-router';
 import BrandGraphic from '../graphics/Brand.graphic.vue';
-import { home, auth, posts } from '@/router/routes';
+import { home, auth, posts, about, login, registerPage, isRoute } from '@/router/routes';
 import NavLink from './NavLink.vue';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/User.store';
 import SpinnerLoader from '../loader/Spinner.loader.vue';
 import BaseLoader from '../loader/Base.loader.vue';
+import BaseIcon from '../icon/Base.icon.vue';
+import { register } from 'module';
+import { ENABLE_LOGIN, ENABLE_REGISTER } from '@/utils/env.flags';
 
-const authStore = useUserStore()
+const userStore = useUserStore()
 
 const isLocal = computed(() => import.meta.env['VITE_ENV'] == 'LOCAL')
+
+const route = useRoute()
+
+const expanderOpen = ref(false)
+
+watch(route, () => {
+    expanderOpen.value = false
+})
+
+const router = useRouter()
+
+const handleLogout = () => {
+    userStore.logout().then(() => {
+        router.replace(home())
+    })
+}
+
+
 </script>
 
 <style lang="scss">
@@ -71,12 +129,28 @@ const isLocal = computed(() => import.meta.env['VITE_ENV'] == 'LOCAL')
 
 
     .nav-bar {
-        background-color: var(--background-2);
+        background-color: var(--background-3);
         width: 100vw;
         left: 0px;
-        display: flex;
-        justify-content: center;
-        gap: 0.5em;
+        transition: max-height .2s;
+
+        &.expander {
+            max-height: 28px;
+            overflow: hidden;
+
+            &:has(input:checked) {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+
+            .nav-link {
+                order: 1;
+            }
+
+            .nav-link.router-link-exact-active {
+                order: 0;
+            }
+        }
     }
 }
 </style>

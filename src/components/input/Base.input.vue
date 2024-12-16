@@ -5,8 +5,8 @@
         </div>
         <div class="base-input__control text-input-primary ">
             <slot name="control" v-bind="{ handleUpdate }">
-                <input class="px-2 invalid:border-red-500 w-full" :type="mappedType" :required="required"
-                    :placeholder="placeholder" :value="modelValue" @input="handleUpdate" />
+                <input :disabled="disable" class="px-2 invalid:border-red-500 w-full" :type="mappedType"
+                    :required="required" :placeholder="placeholder" :value="modelValue" @input="handleUpdate" />
             </slot>
         </div>
     </label>

@@ -4,6 +4,9 @@ import { RouterView, useRoute, useRouter } from 'vue-router'
 import { supabase } from './db/index.db'
 import { useUserStore } from './stores/User.store'
 import PageBanner from './components/core/PageBanner.vue';
+import { useAuthLifecycle } from './utils/Auth.lifecycle';
+import SpinnerLoader from './components/loader/Spinner.loader.vue';
+import { useDialogBinding } from './utils/Dialog.compose';
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -35,15 +38,23 @@ const error = ref()
 
 onErrorCaptured((err) => {
   error.value = err
+
 })
+
+useAuthLifecycle()
+
+const { dialogSession } = useDialogBinding()
 
 </script>
 
 <template>
-  <div v-if="error">{{ JSON.stringify(error) }}</div>
+  <div class="error" v-if="error">{{ JSON.stringify(error) }}</div>
   <template v-else>
     <PageBanner />
+
     <RouterView />
+    <component v-if="dialogSession" :is="dialogSession.component" v-bind="dialogSession.props" />
+
 
   </template>
 </template>

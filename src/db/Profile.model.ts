@@ -1,15 +1,3 @@
-import type { Database } from "./database.types";
+import type { Database } from "./index.db";
 
-export type OAuthToken = Pick<
-    Database["public"]["Tables"]["OAuthTokens"]["Row"],
-    "service" | "created_at"
->;
-
-export type Profile =
-    & Omit<
-        Database["public"]["Tables"]["Profiles"]["Row"],
-        "oauth_tokens"
-    >
-    & {
-        oauth_tokens: OAuthToken[];
-    };
+export type Profile = Database["public"]["Tables"]["Profiles"]["Row"];

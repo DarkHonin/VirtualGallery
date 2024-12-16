@@ -1,4 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../database_types.ts";
+import { Database } from "./database_types";
 
-export { type Client } from "./common.ts";
+export { type Client } from "./db";

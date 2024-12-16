@@ -22,6 +22,7 @@ export interface BaseInputProps {
     | Object[]
     | number[]
     | undefined;
+  disable?: boolean;
 }
 
 export interface TextAreaProps extends BaseInputProps {

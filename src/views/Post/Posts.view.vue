@@ -1,51 +1,84 @@
 <template>
-    <WaterfallLayout
-        style="height: calc(100vh - 100px); max-height: calc(100vh - 100px); min-height: calc(-100px + 100vh);">
-        <SpinnerLoader :loading="blogStore.isActionActive('loading')" :message="blogStore.activeActions.join('<br>')"
-            size="lg" class="m-auto">
-            <RouterView>
-                <template #default="params">
-
-                    <div class="p-2 gap-2 flex flex-col w-full" v-if="!params.Component">
-                        <RouterLink :to="postEdit('new')" v-if="userStore.user"
-                            class="w-full h-28 border border-dashed flex hover:h-24 hover:my-2 transition-all">
-                            <BaseIcon name="add" size="xl" class="m-auto" />
-                        </RouterLink>
-                        <RouterLink :to="post(i.id)" v-for="i in blogStore.posts" :key="i.id">
-                            <PostListItem :item="i" />
-                        </RouterLink>
+    <RouterView>
+        <template v-slot="{ Component }">
+            <Content class="flex flex-col h-full gap-2">
+                <component :is="Component" v-if="Component" />
+                <template v-else>
+                    <div class="bg-background2 p-2 gap-2 flex flex-col">
+                        <div class="flex gap-2">
+                            <BaseButton v-if="userStore.isSignedIn" @click="router.push(postView('new'))">
+                                <BaseIcon name="add" />
+                            </BaseButton>
+                            <BaseButton v-if="userStore.isSignedIn" @click="handleUpload">
+                                <BaseIcon name="upload" />
+                            </BaseButton>
+                        </div>
+                        <BaseInput placeholder="Search" v-model="searchQuery" />
                     </div>
 
-
-                    <component v-else :is="params.Component" />
+                    <PostList :filter="searchQuery" />
                 </template>
 
-            </RouterView>
+            </Content>
 
-        </SpinnerLoader>
-    </WaterfallLayout>
+        </template>
+    </RouterView>
 </template>
 
 <script lang="ts" setup>
+import BaseButton from '@/components/button/Base.button.vue';
+import Content from '@/components/core/Content.vue';
+import BaseIcon from '@/components/icon/Base.icon.vue';
+import BaseInput from '@/components/input/Base.input.vue';
+import SpinnerLoader from '@/components/loader/Spinner.loader.vue';
+import PostList from '@/components/post/parts/Post.list.vue';
+import PostCardBase from '@/components/post/PostCard.base.vue';
+import { postView } from '@/router/routes';
+import { api } from '@/services/index.service';
+import { usePostsStore } from '@/stores/Posts.store';
+import { useUserStore } from '@/stores/User.store';
+import { formatISODate } from '@/utils/Date';
 
-
-import SpinnerLoader from "@/components/loader/Spinner.loader.vue"
-
-import WaterfallLayout from "@/components/layout/Waterfall.layout.vue"
-import { useUserStore } from "@/stores/User.store"
-import { useBlogStore } from "@/stores/Blog.store"
-import PostListItem from "@/components/post/Post.listItem.vue";
-import { onBeforeMount } from "vue";
-import { RouterLink, RouterView } from "vue-router";
-import { post, postEdit } from "@/router/routes";
-import BaseIcon from "@/components/icon/Base.icon.vue";
-
-const blogStore = useBlogStore()
-
-onBeforeMount(() => {
-    blogStore.loadPosts()
-})
+import { onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const userStore = useUserStore()
+const postsStore = usePostsStore()
+
+const searchQuery = ref<string>()
+const router = useRouter()
+
+onMounted(() => {
+    postsStore.getPosts()
+})
+
+const route = useRoute()
+
+watch(() => <string>route.params.postId, (nv, ov) => {
+    console.log(nv, ov)
+    if (nv == 'new') return postsStore._activePost = undefined
+    const postId = parseInt(nv)
+    if (!isNaN(postId)) postsStore.getPost(postId)
+
+})
+
+const handleUpload = () => {
+    const formData = new FormData()
+    const input: HTMLInputElement = Object.assign(document.createElement('input'), {
+        type: "file",
+        accept: "application/zip"
+    })
+
+    input.addEventListener("change", async () => {
+
+        formData.append("file", input.files![0])
+        const status = await api('upload', formData)
+        postsStore.getPosts()
+    })
+
+    input.click()
+
+}
+
 
 </script>

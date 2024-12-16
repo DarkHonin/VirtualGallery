@@ -1,25 +1,26 @@
-import { usePostStore } from "@/stores/Post.store";
 import type { RouteRecordRaw } from "vue-router";
 import * as routeNames from "./routes";
 import { useUserStore } from "@/stores/User.store";
+import { usePostsStore } from "@/stores/Posts.store";
 
-export default {
-    path: "/posts",
-    ...routeNames.posts(),
-    component: () => import("../views/Post/Posts.view.vue"),
-    children: [
-        {
-            path: "i/:postId",
-            ...routeNames.post(),
-            component: () => import("../views/Post/Post.view.vue"),
+export default [
+    {
+        path: "/projects",
+        ...routeNames.posts(),
+        component: () => import("../views/Post/Posts.view.vue"),
+    },
+    {
+        path: "/project/:postId",
+        ...routeNames.postView(),
+        component: () => import("../views/Post/Post.view.vue"),
+        beforeEnter: (to, from, next) => {
+            const postStore = usePostsStore();
+            if (<string> to.params.postId == "new") {
+                postStore.clearActivePost();
+            } else {
+                postStore.getPost(parseInt(<string> to.params.postId));
+            }
+            next();
         },
-        {
-            path: "e/:postId",
-            ...routeNames.postEdit(),
-            meta: {
-                requiresAuth: true,
-            },
-            component: () => import("../views/Post/Post.edit.vue"),
-        },
-    ],
-} as RouteRecordRaw;
+    },
+] as RouteRecordRaw[];

@@ -1,9 +1,9 @@
-import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
-import { Database } from "../database_types.ts";
+import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js";
+import type { Database } from "./database_types.ts";
 
 export type Client = SupabaseClient<Database>;
 
-export const dbClient = (req: Request) => {
+export const dbClient = (req: Request): Client => {
     return createClient<Database>(
         Deno.env.get("SUPABASE_URL") ?? "",
         Deno.env.get("SUPABASE_ANON_KEY") ?? "",

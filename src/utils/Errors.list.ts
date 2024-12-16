@@ -1,0 +1,1 @@
+export const NO_USER_SESSION = "NO_USER_SESSION";

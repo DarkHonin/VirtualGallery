@@ -4,9 +4,18 @@ import { supabase } from "@/db/index.db";
 import { defineStateActions, type StoreState } from "./util/StateActions.util";
 import { api } from "@/services/index.service";
 import type { Profile } from "@/db/Profile.model";
+import {
+  getUserSession,
+  registerWithEmail,
+  signUserIn,
+  signUserOut,
+} from "@/services/User.service";
+import { useRouter } from "vue-router";
+import { home } from "@/router/routes";
 
 export const userStoreActions = {
   loading: "Loading Session",
+  signup: "Creating account",
   signIn: "Signing In",
   signOut: "Signing Out",
 };
@@ -26,43 +35,35 @@ export const useUserStore = defineStore("UserStore", {
   }),
   getters: {
     user: ({ _session }) => _session?.user,
+    isSignedIn: ({ _session }) => Boolean(_session),
     ...userStoreStateActions.getters,
   },
   actions: {
-    preflight() {
+    ///
+    async captureSession() {
       return userStoreStateActions.runAction(this, "loading", async () => {
-        return supabase.auth.getSession().then(({ data }) => {
-          if (!data || !data.session) return (this._session = undefined);
-          this._session = data.session;
-        });
+        this._session = await getUserSession();
       });
     },
-    async signIn(email: string) {
-      return userStoreStateActions.runAction(
-        this,
-        "signIn",
-        async () => {
-          await api("vue-signin", { body: JSON.stringify({ email }) });
-        },
-      );
+
+    async registerUser(...args: Parameters<typeof registerWithEmail>) {
+      return userStoreStateActions.runAction(this, "signup", async () => {
+        return registerWithEmail(...args);
+      });
     },
-    async signInWPass(email: string, password: string) {
+
+    async signInWithPassword(...args: Parameters<typeof signUserIn>) {
       return userStoreStateActions.runAction(this, "signIn", async () => {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) throw error;
-
-        this._session = data.session;
+        return await signUserIn(...args);
       });
     },
+
+    ///
+
     logout() {
       return userStoreStateActions.runAction(this, "signOut", async () => {
-        await new Promise((y) => setTimeout(y, 5000));
-        this._session = undefined;
-        return supabase.auth.signOut();
+        await signUserOut();
+        return;
       });
     },
   },

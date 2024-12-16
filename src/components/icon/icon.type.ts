@@ -1,6 +1,6 @@
 export interface IconProps {
   name: string;
-  style?: "outlined";
+  iconStyle?: "outlined";
   size?: "sm" | "md" | "lg" | "xl";
 }
 
