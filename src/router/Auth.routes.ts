@@ -10,13 +10,13 @@ export default {
         {
             ...routeNames.login(),
             path: "",
-            component: import("../views/Auth/Login.view.vue"),
+            component: () => import("../views/Auth/Login.view.vue"),
         },
 
         {
             ...routeNames.registerPage(),
             path: "register",
-            component: import("../views/Auth/Register.view.vue"),
+            component: () => import("../views/Auth/Register.view.vue"),
         },
     ],
 } as RouteRecordRaw;

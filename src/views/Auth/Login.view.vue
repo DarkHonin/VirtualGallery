@@ -57,6 +57,7 @@ const formValid = computed(() => ![userEmail, userPassword, token].map(unref).so
 
 <template>
     <Content>
+
         <form class="vert justify-center items-stretch flex flex-col col-start-2" @submit.prevent="handleLogin">
             <BaseInput label="Email Address" v-model="userEmail" placeholder="example@mail.com" type="email" required />
             <BaseInput label="Password" v-model="userPassword" placeholder="*********" type="password" required />
