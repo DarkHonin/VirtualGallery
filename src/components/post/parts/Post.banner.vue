@@ -18,9 +18,9 @@
 
             <span v-if="post?.updated_at" class="text-xs opacity-50 ml-auto text-nowrap w-min block">{{
                 formatISODate(post.updated_at!)
-            }}</span>
+                }}</span>
         </div>
-        <div v-if="!isNewPost && !editState && !postEditStore.activeEntry && isAuthor"
+        <div v-if="!isNewPost && !editState && !postEditStore.activeEntry && isAuthor && isRoute(postView())"
             class=" gap-2 bg-background2 p-2 my-2 flex">
             <BaseButton @click="postEditStore.createPostEntry" :disabled="postEditStore.isActing"
                 v-if="!postEditStore.activeEntry" :loading="postEditStore.isActionActive('creatingEntry')">
@@ -53,6 +53,7 @@ import { usePostEditStore } from '@/stores/PostEditor.store';
 import { usePostsStore } from '@/stores/Posts.store';
 import { formatISODate } from '@/utils/Date';
 import { openDialog } from '@/utils/Dialog.compose';
+
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 

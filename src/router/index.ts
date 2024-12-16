@@ -12,6 +12,7 @@ import profileRoutes from "./profile.routes";
 
 import NotFoundView from "@/views/Common/NotFound.view.vue";
 import AuthRoutes from "./Auth.routes";
+import AboutView from "@/views/About/About.view.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,7 +25,7 @@ const router = createRouter({
     {
       path: "/about",
       ...routeNames.about(),
-      component: LandingView,
+      component: AboutView,
     },
     {
       path: "",
