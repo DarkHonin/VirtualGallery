@@ -6,7 +6,6 @@
 
                 <span v-if="!postsStore.latestPosts.length" class="m-auto text-center">...Theres nothing here
                     yet...</span>
-                {{ ENABLE_LOGIN }}
                 <template v-for="post in postsStore.latestPosts" :key="post.id">
                     <PostItem :post-entry="post" />
                     <hr />

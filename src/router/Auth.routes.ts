@@ -7,21 +7,16 @@ export default {
     path: "auth",
     ...routeNames.auth(),
     children: [
-        ...(ENABLE_LOGIN
-            ? [{
-                ...routeNames.login(),
-                path: "",
-                component: import("../views/Auth/Login.view.vue"),
-            }]
-            : []),
-        ...(ENABLE_REGISTER
-            ? [
-                {
-                    ...routeNames.registerPage(),
-                    path: "register",
-                    component: import("../views/Auth/Register.view.vue"),
-                },
-            ]
-            : []),
+        {
+            ...routeNames.login(),
+            path: "",
+            component: import("../views/Auth/Login.view.vue"),
+        },
+
+        {
+            ...routeNames.registerPage(),
+            path: "register",
+            component: import("../views/Auth/Register.view.vue"),
+        },
     ],
 } as RouteRecordRaw;
