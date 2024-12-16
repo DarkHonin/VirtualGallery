@@ -3,6 +3,9 @@
         <SpinnerLoader class="m-auto" size="lg" :loading="postsStore.isActing">
             <template v-if="postsStore.latestPosts">
                 <h1 class="text-center underline mb-4">Recent activity</h1>
+
+                <span v-if="!postsStore.latestPosts" class="m-auto text-center">...Theres nothing here yet...</span>
+
                 <template v-for="post in postsStore.latestPosts" :key="post.id">
                     <PostItem :post-entry="post" />
                     <hr />
