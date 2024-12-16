@@ -4,8 +4,9 @@
             <template v-if="postsStore.latestPosts">
                 <h1 class="text-center underline mb-4">Recent activity</h1>
 
-                <span v-if="!postsStore.latestPosts" class="m-auto text-center">...Theres nothing here yet...</span>
-
+                <span v-if="!postsStore.latestPosts.length" class="m-auto text-center">...Theres nothing here
+                    yet...</span>
+                {{ ENABLE_LOGIN }}
                 <template v-for="post in postsStore.latestPosts" :key="post.id">
                     <PostItem :post-entry="post" />
                     <hr />
@@ -26,6 +27,7 @@ import SpinnerLoader from '@/components/loader/Spinner.loader.vue';
 import PostView from './Post/Post.view.vue';
 import BrandGraphic from '@/components/graphics/Brand.graphic.vue';
 import PostItem from '@/components/post/Post.item.vue';
+import { ENABLE_LOGIN } from '@/utils/env.flags';
 
 const postsStore = usePostsStore()
 
