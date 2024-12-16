@@ -3,7 +3,7 @@
         <span class="text-xs opacity-50 p-2 text-nowrap w-min block select-none">Project</span>
         <div class="flex items-center gap-2  px-2 select-none">
             <div class="flex gap-2 items-center w-full select-none">
-                <template v-if="isAuthor">
+                <template v-if="isAuthor && isRoute(postView())">
                     <BaseButton :disabled="!titleValid || postEditStore.isActing" @click="handleSave"
                         :loading="postEditStore.isActionActive(['creatingPost', 'savingPost'])">
                         <BaseIcon :name="editState ? 'save' : 'edit'" />
@@ -18,7 +18,7 @@
 
             <span v-if="post?.updated_at" class="text-xs opacity-50 ml-auto text-nowrap w-min block">{{
                 formatISODate(post.updated_at!)
-                }}</span>
+            }}</span>
         </div>
         <div v-if="!isNewPost && !editState && !postEditStore.activeEntry && isAuthor && isRoute(postView())"
             class=" gap-2 bg-background2 p-2 my-2 flex">
