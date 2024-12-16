@@ -49,6 +49,8 @@
             <NavLink class="w-full justify-center items-center text-center" :to="about()">
                 About
             </NavLink>
+            {{ userStore.isSignedIn }}
+            {{ ENABLE_LOGIN }}
             <template v-if="!userStore.isSignedIn">
                 <NavLink v-if="ENABLE_LOGIN" class="w-full justify-center items-center text-center" :to="login()">
                     Login
