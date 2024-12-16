@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full  bg-background2 post-card" :style="{ backgroundImage: `URL(${media?.[0].url})` }">
+    <div class="w-full  bg-background2 post-card" :style="{ backgroundImage: `URL(${media?.[0]?.url})` }">
         <div class="flair-container p-2">
             <PostBanner :post="post" />
         </div>
