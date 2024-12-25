@@ -1,5 +1,6 @@
 <template>
     <Content class="flex flex-col gap-2">
+        <BaseButton @click="testDialog" label="Test Dialog" />
         <SpinnerLoader class="m-auto" size="lg" :loading="postsStore.isActing">
             <template v-if="postsStore.latestPosts">
                 <h1 class="text-center underline mb-4">Recent activity</h1>
@@ -27,11 +28,20 @@ import PostView from './Post/Post.view.vue';
 import BrandGraphic from '@/components/graphics/Brand.graphic.vue';
 import PostItem from '@/components/post/Post.item.vue';
 import { ENABLE_LOGIN } from '@/utils/env.flags';
+import BaseButton from '@/components/button/Base.button.vue';
+import { openDialog } from '@/utils/Dialog.compose';
+import BaseDialog from '@/components/util/Base.dialog.vue';
+import DialogTest from './About/DialogTest.vue';
 
 const postsStore = usePostsStore()
 
 onMounted(() => {
     postsStore.getPosts()
 })
+
+
+const testDialog = () => {
+    const dialog = openDialog(DialogTest)
+}
 
 </script>
