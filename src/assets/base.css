@@ -36,6 +36,10 @@ body:has(.dialog) {
   overflow: hidden;
 }
 
+#app {
+  min-height: 100vh;
+}
+
 i {
   color: theme('colors.positive');
 }

@@ -13,6 +13,7 @@ import profileRoutes from "./profile.routes";
 import NotFoundView from "@/views/Common/NotFound.view.vue";
 import AuthRoutes from "./Auth.routes";
 import AboutView from "@/views/About/About.view.vue";
+import TechTreeView from "@/views/TechTree/TechTree.view.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
         ...postRoute,
         AuthRoutes,
       ],
+    },
+    {
+      path: "/techtree",
+      name: "TechTree",
+      component: TechTreeView,
     },
     {
       path: "/:pathMatch(.*)*",
