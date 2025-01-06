@@ -17,12 +17,21 @@ h1 {
   text-wrap: wrap;
 }
 
+.markup h1 {
+  font-size: 30px;
+}
+
 h2 {
   font-size: 24px;
 }
 
 h3 {
   font-size: 18px;
+}
+
+h4 {
+  font-size: 12px;
+  margin: 1em 0px;
 }
 
 body {
@@ -68,7 +77,7 @@ i {
 }
 
 .markup p {
-  padding: 0em 1em;
+  padding: 1em 0em;
   margin: auto;
 }
 
@@ -91,4 +100,19 @@ hr {
 
 .flair-container:hover {
   backdrop-filter: blur(0px);
+}
+
+.markup ol,
+.markup ul {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 2em;
+}
+
+.markup ol {
+  list-style-type: decimal;
+}
+
+.markup ol li {
+  list-style: decimal;
 }

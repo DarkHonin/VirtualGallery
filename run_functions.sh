@@ -1,1 +1,1 @@
-supabase functions serve --workdir src --env-file supabase/.env --import-map supabase/functions/import_map.json
+supabase functions serve --env-file supabase/.env --import-map supabase/functions/import_map.json

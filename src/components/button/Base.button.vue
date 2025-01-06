@@ -2,7 +2,7 @@
     <div class="relative button-base">
         <button v-if="type == 'button'"
             class="button-base__control border-button-border border-b-2 active:border-0 px-2 rounded   select-none text-center disabled:cursor-not-allowed"
-            :class="colors[color]" :disabled="disabled || loading">
+            style="color: white" :class="colors[color]" :disabled="disabled || loading">
             <slot>
                 {{ label }}
             </slot>

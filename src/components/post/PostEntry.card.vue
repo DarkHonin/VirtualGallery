@@ -2,8 +2,9 @@
     <div class="bg-background2  post-entry"
         :style="{ backgroundImage: isRoute(home()) ? `URL(${media?.[0]})` : undefined }"
         v-if="postEditStore.activeEntry?.id !== entry.id">
-        <div class="flair-container pl-4 flex flex-col justify-between">
+        <div class="flair-container  flex flex-col justify-between">
             <PostEntryBanner :entry="entry" />
+            <hr />
             <SpinnerLoader class="m-auto markup-loader" :loading="loadingMarkup">
                 <div :innerHTML="markup" class="p-2 markup" />
             </SpinnerLoader>

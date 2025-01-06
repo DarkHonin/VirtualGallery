@@ -1,6 +1,12 @@
 <template>
     <div class="bg-background2 px-2 md:p-0 post-banner">
-        <span class="text-xs opacity-50 p-2 text-nowrap w-min block select-none">Project</span>
+        <div class="flex justify-between items-center p-2">
+            <span class="text-xs opacity-50  text-nowrap w-min block select-none">Project</span>
+            <span v-if="post?.updated_at" class="text-xs opacity-50 ml-auto text-nowrap w-min block">{{
+                formatISODate(post.updated_at!)
+            }}</span>
+
+        </div>
         <div class="flex items-center gap-2  px-2 select-none">
             <div class="flex gap-2 items-center w-full select-none">
                 <template v-if="isAuthor && isRoute(postView())">
@@ -16,9 +22,7 @@
                 </h2>
             </div>
 
-            <span v-if="post?.updated_at" class="text-xs opacity-50 ml-auto text-nowrap w-min block">{{
-                formatISODate(post.updated_at!)
-            }}</span>
+
         </div>
         <div v-if="!isNewPost && !editState && !postEditStore.activeEntry && isAuthor && isRoute(postView())"
             class=" gap-2 bg-background2 p-2 my-2 flex">

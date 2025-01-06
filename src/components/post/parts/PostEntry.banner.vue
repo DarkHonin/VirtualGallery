@@ -1,9 +1,12 @@
 <template>
     <label class="flex flex-col md:px-2 px-4 py-2 relative post-entry-banner select-none">
         <input type="radio" name="post-entry-focus" v-if="isRoute(home())" hidden />
-        <span class="text-xs opacity-50">Entry {{ entry.index + 1 }}</span>
+        <div class="flex justify-between">
+            <span class="text-xs opacity-50">Entry {{ entry.index + 1 }}</span>
+            <span class="text-xs opacity-50 ml-auto text-nowrap">{{ formatISODate(entry!.timestamp!) }}</span>
+        </div>
         <div class="flex items-center">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 w-full">
                 <div v-if="postStore.isAuthor && !postEditStore.activeEntry && isPostEditPage">
                     <BaseButton @click="postEditStore.editPostEntry(entry)" :disabled="postEditStore.isActing">
                         <BaseIcon name="edit" />
@@ -12,13 +15,12 @@
                 <h1>{{ entry?.title.trim() ?? 'untitled' }}</h1>
                 <div class="ml-auto flex gap-2"
                     v-if="postStore.isAuthor && !postEditStore.activeEntry && isPostEditPage">
-                    <BaseButton @click="postEditStore.deleteEntry(entry)" color="negative"
+                    <BaseButton class="ml-auto" @click="postEditStore.deleteEntry(entry)" color="negative"
                         :disabled="postEditStore.isActing">
                         <BaseIcon name="delete" />
                     </BaseButton>
                 </div>
             </div>
-            <span class="text-xs opacity-50 ml-auto text-nowrap">{{ formatISODate(entry!.timestamp!) }}</span>
         </div>
     </label>
 </template>
